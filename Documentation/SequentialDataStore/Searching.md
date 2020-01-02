@@ -46,7 +46,7 @@ Searching for Types
 
 Similarly, the search functionality for types is also exposed through REST API and the client libraries method ``GetTypesAsync``. The query syntax and the request parameters are the same. 
 The only difference is the resource you're searching on, and you can search on different properties for types than for streams. The searchable properties are below. 
-See [Types](xref:sdsTypes) for more information.
+See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType properties.
 
 | Property          | Searchable |
 |-------------------|------------|
