@@ -2,17 +2,64 @@
 uid: sdsSearching
 ---
 
-# Searching
+# Search
 
-Search in SDS provides a way to search text, fields, etc. across the Sequential Data Store. This document covers the 
-searching for SdsStreams, SdsTypes, and SdsStreamViews.
+You can search for texts, fields and others in Sequential Data Store (SDS). The ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync`` overloads return items that match specific search criteria within a given namespace. By default, the query parameter applies to all searchable object fields.
 
-## Searching for Streams
+For example, let's say a namespace contains the following streams:
+
+**streamId** | **Name**  | **Description**
+------------ | --------- | ----------------
+stream1      | tempA     | The temperature from DeviceA
+stream2      | pressureA | The pressure from DeviceA
+stream3      | calcA     | calculation from DeviceA values
+
+A ``GetStreamsAsync`` call with different ``Query`` values will return the content below:
+
+**QueryString**     | **Streams returned**
+------------------  | ----------------------------------------
+``temperature``  | Only stream1 returned.
+``calc*``        | Only stream3 returned.
+``DeviceA*``     | All three streams returned.
+``humidity*``    | No streams returned.
+
+**Request**
+ ```text
+	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name
+
+	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=id asc
+
+	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name desc
+
+	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name desc&skip=10&count=20
+ ```
+
+**.NET Library**
+Use parameters ``skip`` and ``count`` to return what you need when a large number of results match the ``query`` criteria.``count`` indicates the maximum number of items returned by the ``GetStreamsAsync()`` or ``GetTypesAsync()`` call. The maximum value of 
+the ``count`` parameter is 1000. ``skip`` indicates the number of matched items to skip over before returning matching items. You use the skip parameter when more items match the search criteria than can be returned in a single call. 
+
+For example, let's say there are 175 streams that match the search criteria: “temperature”.
+
+The call below will return the first 100 matches:
+```csharp
+    _metadataService.GetStreamsAsync("temperature", 0, 100)
+```
+
+By setting ``skip`` to 100, the following call will return the remaining 75 matches, skipping over the first 
+100:
+```csharp
+    _metadataService.GetStreamsAsync("temperature", 100, 100)
+```
+
+The ``orderby`` parameter is supported for searching both the streams and types. The basic functionality of it is to search the items and then return the result in sorted order.
+The default value for ``orderby`` parameter is ascending order. It can be changed to descending order by specifying ``desc`` alongside the orderby field value. It can be used in conjunction with 
+``query``, ``skip``, and ``count`` parameters.
 
 
+## Search for streams
 The search functionality for streams is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
-The searchable properties are below. 
 
+**Searcheable Properties**
 | Property          | Searchable  |
 |-------------------|-------------|
 | Id                | Yes		  |
@@ -23,27 +70,33 @@ The searchable properties are below.
 | InterpolationMode | No		  |
 | ExtrapolationMode | No		  |
 | PropertyOverrides | No		  |
+
+**Searcheable Child Resources**
+| Property          | Searchable  |
+|-------------------|-------------|
 | [Tags](xref:sdsStreamExtra)*		| Yes		  |
 | [Metadata](xref:sdsStreamExtra)*	| Yes		  |
+|ACL | No		  |
+| Owner | No		  |
 
 ``GetStreamsAsync`` is an overloaded method that is used to search for and return streams (also see [Streams](xref:sdsStreams) for information about using ``GetStreamAsync`` to return streams). When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
 
+**Request**
+Searching for streams is also possible using the REST API and specifying the optional `query` parameter, as shown here:
+ ```text
+      GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query={query}&skip={skip}&count={count}
+ ```
+**.NET Library**
 The syntax of the client libraries method is as follows:
 ```csharp
       _metadataService.GetStreamsAsync(query:"QueryString", skip:0, count:100);
 ```
 
-Searching for streams is also possible using the REST API and specifying the optional `query` parameter, as shown here:
- ```text
-      GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query={query}&skip={skip}&count={count}
- ```
-
 The Stream fields valid for search are identified in the fields table located on the [Streams](xref:sdsStreams) page. Note that Stream Metadata has unique 
 syntax rules, see [How Searching Works: Stream Metadata](#Stream_Metadata_search_topic).
 
-## Searching for Types
-
-Similarly, the search functionality for types is also exposed through REST API and the client libraries method ``GetTypesAsync``. The query syntax and the request parameters are the same. 
+## Search for types
+The search functionality for types is exposed through REST API and the client libraries method ``GetTypesAsync``. The query syntax and the request parameters are the same. 
 The only difference is the resource you're searching on, and you can search on different properties for types than for streams. The searchable properties are below. 
 See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType properties.
 
@@ -74,9 +127,8 @@ The Type fields valid for search are identified in the fields table located on t
 as being searchable but with limitations: Each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested
 SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
 
-## Searching for Stream Views
-
-Similarly, the search functionality for stream views is also exposed through REST API and the client libraries method ``GetStreamViewsAsync``. The query syntax and the request parameters are the same. 
+## Search for stream views
+The search functionality for stream views is also exposed through REST API and the client libraries method ``GetStreamViewsAsync``. The query syntax and the request parameters are the same. 
 The only difference is the resource you're searching on, and you can match on different properties for stream views than for streams and types. 
 The searchable properties are below. See [Stream Views](xref:sdsStreamViews) for more information.
 
@@ -106,69 +158,6 @@ is identified as being searchable but with limitations because SdsStreamViewProp
 SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. 
 This includes nested SdsStreamViewProperties.
 
-## How Searching Works
-
-
-The ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync`` overloads return items that match specific 
-search criteria within a given namespace. 
-The query parameter will be applied across all searchable fields of objects we’re searching on by default.
-
-For example, assume that a namespace contains the following Streams:
-
-**streamId** | **Name**  | **Description**
------------- | --------- | ----------------
-stream1      | tempA     | The temperature from DeviceA
-stream2      | pressureA | The pressure from DeviceA
-stream3      | calcA     | calculation from DeviceA values
-
-
-Using the stream data above, the following table shows the results of a ``GetStreamsAsync`` call with different ``Query`` values:
-
-**QueryString**     | **Streams returned**
-------------------  | ----------------------------------------
-``temperature``  | Only stream1 returned.
-``calc*``        | Only stream3 returned.
-``DeviceA*``     | All three streams returned.
-``humidity*``    | No streams returned.
-
-The ``skip`` and ``count`` parameters determine which items are returned when a large number of them match 
-the ``query`` criteria.   
-
-``count`` indicates the maximum number of items returned by the ``GetStreamsAsync()`` or ``GetTypesAsync()`` call. The maximum value of 
-the ``count`` parameter is 1000. 
-
-``skip`` indicates the number of matched items to skip over before returning matching items. You use the 
-skip parameter when more items match the search criteria than can be returned in a single call. 
-
-**.NET Library**
-
-For example, assume there are 175 streams that match the search criteria: “temperature”.
-
-The following call returns the first 100 matches:
-```csharp
-    _metadataService.GetStreamsAsync("temperature", 0, 100)
-```
-
-After the previous call, you can use the following call to return the remaining 75 matches, skipping over the first 
-100 matches because of the skip parameter set at 100):
-```csharp
-    _metadataService.GetStreamsAsync("temperature", 100, 100)
-```
-
-The ``orderby`` parameter is supported for searching both the streams and types. The basic functionality of it is to search the items and then return the result in sorted order.
-The default value for ``orderby`` parameter is ascending order. It can be changed to descending order by specifying ``desc`` alongside the orderby field value. It can be used in conjunction with 
-``query``, ``skip``, and ``count`` parameters.
-
-**Request**
- ```text
-	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name
-
-	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=id asc
-
-	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name desc
-
-	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name desc&skip=10&count=20
- ```
 
 ## Tokenization
 
