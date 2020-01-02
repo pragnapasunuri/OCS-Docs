@@ -43,7 +43,7 @@ to be added to the Data Store independently.
 The following table shows the required and optional SdsType fields. Fields that are not included are reserved for internal SDS use. 
 See the [Searching](xref:sdsSearching) topic regarding limitations on search.
 
-
+<a name="typepropertytable"></a>
 | Property          | Type                   | Optionality | Searchable | Details |
 |-------------------|------------------------|-------------|---------|---------|
 | Id                | String                 | Required    | Yes | Identifier for referencing the type |
