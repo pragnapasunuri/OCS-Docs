@@ -12,7 +12,7 @@ For example, let's say a namespace contains the following streams:
 ------------ | --------- | ----------------
 stream1      | tempA     | The temperature from DeviceA
 stream2      | pressureA | The pressure from DeviceA
-stream3      | calcA     | calculation from DeviceA values
+stream3      | calcA     | Calculation from DeviceA values
 
 A ``GetStreamsAsync`` call with different ``Query`` values will return the content below:
 
@@ -24,6 +24,8 @@ A ``GetStreamsAsync`` call with different ``Query`` values will return the conte
 ``humidity*``    | No streams returned.
 
 **Request**
+The ``orderby`` parameter supports search in streams and types. Use it to return the result in a sorted order. The default value for this  parameter is ascending. For descending order, specify ``desc`` by the ``orderby`` field value. It can be used in conjunction with ``query``, ``skip``, and ``count`` parameters.
+
  ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name
 
@@ -33,6 +35,20 @@ A ``GetStreamsAsync`` call with different ``Query`` values will return the conte
 
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name desc&skip=10&count=20
  ```
+**Parameters**
+`string query`  
+An optional parameter representing a string search. 
+
+`int skip`  
+An optional parameter representing the zero-based offset of the first SdsStream to retrieve. 
+If not specified, a default value of 0 is used.
+
+`int count`  
+An optional parameter representing the maximum number of SdsStreams to retrieve. 
+If not specified, a default value of 100 is used.
+
+`string orderby`  
+An optional parameter representing sorted order which SdsStreams will be returned. A field name is required. The sorting is based on the stored values for the given field (of type string). For example, ``orderby=name`` would sort the returned results by the ``name`` values (ascending by default). Additionally, a value can be provided along with the field name to identify whether to sort ascending or descending, by using values ``asc`` or ``desc``, respectively. For example, ``orderby=name desc`` would sort the returned results by the ``name`` values, descending. If no value is specified, there is no sorting of results.
 
 **.NET Library**
 Use parameters ``skip`` and ``count`` to return what you need when a large number of results match the ``query`` criteria.``count`` indicates the maximum number of items returned by the ``GetStreamsAsync()`` or ``GetTypesAsync()`` call. The maximum value of 
@@ -50,11 +66,6 @@ By setting ``skip`` to 100, the following call will return the remaining 75 matc
 ```csharp
     _metadataService.GetStreamsAsync("temperature", 100, 100)
 ```
-
-The ``orderby`` parameter is supported for searching both the streams and types. The basic functionality of it is to search the items and then return the result in sorted order.
-The default value for ``orderby`` parameter is ascending order. It can be changed to descending order by specifying ``desc`` alongside the orderby field value. It can be used in conjunction with 
-``query``, ``skip``, and ``count`` parameters.
-
 
 ## Search for streams
 The search functionality for streams is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
@@ -76,10 +87,10 @@ The search functionality for streams is exposed through the REST API and the cli
 |-------------------|-------------|
 | [Tags](xref:sdsStreamExtra)*		| Yes		  |
 | [Metadata](xref:sdsStreamExtra)*	| Yes		  |
-|ACL | No		  |
+| ACL | No		  |
 | Owner | No		  |
 
-``GetStreamsAsync`` is an overloaded method that is used to search for and return streams (also see [Streams](xref:sdsStreams) for information about using ``GetStreamAsync`` to return streams). When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
+``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
 
 **Request**
 Searching for streams is also possible using the REST API and specifying the optional `query` parameter, as shown here:
