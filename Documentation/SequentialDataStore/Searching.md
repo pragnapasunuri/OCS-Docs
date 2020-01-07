@@ -93,12 +93,12 @@ Streams search is exposed through the REST API and the client libraries method `
 | ACL | No		  |
 | Owner | No		  |
 
-####Request####
+#### Request
 Search for streams using the REST API and specifying the optional `query` parameter:
  ```text
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query={query}&skip={skip}&count={count}
  ```
-#####Parameters#####
+##### Parameters
 `string query`  
 An optional parameter representing a string search. 
 
@@ -111,14 +111,14 @@ An optional parameter representing the maximum number of SdsStreams to retrieve.
 If not specified, a default value of 100 is used.
 
 ``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
-####.NET client libraries method ####
+#### .NET client libraries method
 ```csharp
       _metadataService.GetStreamsAsync(query:"QueryString", skip:0, count:100);
 ```
 
 The Stream fields valid for search are identified in the fields table located on the [Streams](xref:sdsStreams) page. Note that Stream Metadata has unique syntax rules, see [How Searching Works: Stream Metadata](#Stream_Metadata_search_topic).
 
-## Search for types ##
+## Search for types
 Types search is exposed through the REST API and the client libraries method ``GetTypesAsync``. 
 
 See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType properties.
@@ -131,16 +131,16 @@ See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType p
 | SdsTypeCode       | No         |
 | InterpolationMode | No         |
 | ExtrapolationMode | No         |
-| Properties*        | Yes, with limitations |
+| Properties        | Yes, with limitations* |
 
 The Properties field is identified as being searchable but with limitations: each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
 
-####Request####
+#### Request
 Search for types using the REST API and specifying the optional `query` parameter:
  ```text
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Types?query={query}&skip={skip}&count={count}
  ```
-#####Parameters#####
+##### Parameters
 `string query`  
 An optional parameter representing a string search. 
 
@@ -153,15 +153,15 @@ An optional parameter representing the maximum number of SdsTypes to retrieve.
 If not specified, a default value of 100 is used.
 
 ``GetTypesAsync`` is an overloaded method that is used to search for and return types. 
-####.NET client libraries method ####
+#### .NET client libraries method
 ```csharp
       _metadataService.GetTypesAsync(query:"QueryString", skip:0, count:100);
 ```
-## Search for stream views ##
+## Search for stream views
 Stream views search is exposed through the REST API and the client libraries methodd ``GetStreamViewsAsync``. 
 
 The searchable properties are below. See [Stream Views](xref:sdsStreamViews) for more information.
-
+**Searcheable Properties**
 | Property     | Searchable |
 |--------------|------------|
 | Id           | Yes		|
@@ -169,31 +169,35 @@ The searchable properties are below. See [Stream Views](xref:sdsStreamViews) for
 | Description  | Yes		|
 | SourceTypeId | Yes		|
 | TargetTypeId | Yes		|
-| Properties   | Yes, with limitations |
+| Properties   | Yes, with limitations* |
+The Stream View fields valid for search are identified in the fields table located on the [Stream Views](xref:sdsStreamViews) page. The Properties field is identified as being searchable but with limitations because SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties.
 
+#### Request
+Search for stream views using the REST API and specifying the optional `query` parameter:
+ ```text
+    GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/StreamViews?query={query}&skip={skip}&count={count}
+ ```
+##### Parameters
+`string query`  
+An optional parameter representing a stream view search. 
+
+`int skip`  
+An optional parameter representing the zero-based offset of the first SdsStreamView to retrieve. 
+If not specified, a default value of 0 is used.
+
+`int count`  
+An optional parameter representing the maximum number of SdsStreamView to retrieve. 
+If not specified, a default value of 100 is used.
 
 ``GetStreamViewsAsync`` is an overloaded method that is used to search for and return stream views. 
 
-The syntax of the client libraries method is as follows:
+#### .NET client libraries method
 ```csharp
     _metadataService.GetStreamViewsAsync(query:"QueryString", skip:0, count:100);
 ```
 
-As previously mentioned, searching for stream views is also possible using the REST API and specifying the optional `query` parameter, as shown here:
- ```text
-    GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/StreamViews?query={query}&skip={skip}&count={count}
- ```
-The Stream View fields valid for search are identified in the fields table located on the [Stream Views](xref:sdsStreamViews) page. The Properties field
-is identified as being searchable but with limitations because SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's
-SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. 
-This includes nested SdsStreamViewProperties.
-
-
 ## Tokenization
-
-Tokenization is the process of breaking a string sequence into pieces called tokens using specific characters to delimit tokens. 
-
-When performing a search, the user specified query is tokenized into search terms. 
+Tokenization is the process of breaking a string sequence into pieces called tokens using specific characters to delimit tokens. User- specified queries are tokenized into search terms during search. 
 
 The rules around how the query string is tokenized can affect the search results. 
 Terms are delimited by spaces or by one or more punctuation characters followed by a space. 
