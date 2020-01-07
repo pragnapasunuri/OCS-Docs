@@ -24,7 +24,8 @@ A ``GetStreamsAsync`` call with different ``Query`` values will return the conte
 ``humidity*``    | No streams returned.
 
 **Request**
-The ``orderby`` parameter supports search in streams and types. Use it to return the result in a sorted order. The default value for this  parameter is ascending. For descending order, specify ``desc`` by the ``orderby`` field value. It can be used in conjunction with ``query``, ``skip``, and ``count`` parameters.
+
+The ``orderby`` parameter supports search in streams and types. Use it to return the result in a sorted order. The default value for this  parameter is ascending. For descending order, specify ``desc`` after the ``orderby`` field value. It can be used in conjunction with ``query``, ``skip``, and ``count`` parameters.
 
  ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name
@@ -36,6 +37,7 @@ The ``orderby`` parameter supports search in streams and types. Use it to return
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name desc&skip=10&count=20
  ```
 **Parameters**
+
 `string query`  
 An optional parameter representing a string search. 
 
@@ -51,6 +53,7 @@ If not specified, a default value of 100 is used.
 An optional parameter representing sorted order which SdsStreams will be returned. A field name is required. The sorting is based on the stored values for the given field (of type string). For example, ``orderby=name`` would sort the returned results by the ``name`` values (ascending by default). Additionally, a value can be provided along with the field name to identify whether to sort ascending or descending, by using values ``asc`` or ``desc``, respectively. For example, ``orderby=name desc`` would sort the returned results by the ``name`` values, descending. If no value is specified, there is no sorting of results.
 
 **.NET Library**
+
 Use parameters ``skip`` and ``count`` to return what you need when a large number of results match the ``query`` criteria.``count`` indicates the maximum number of items returned by the ``GetStreamsAsync()`` or ``GetTypesAsync()`` call. The maximum value of 
 the ``count`` parameter is 1000. ``skip`` indicates the number of matched items to skip over before returning matching items. You use the skip parameter when more items match the search criteria than can be returned in a single call. 
 
@@ -68,7 +71,7 @@ By setting ``skip`` to 100, the following call will return the remaining 75 matc
 ```
 
 ## Search for streams
-The search functionality for streams is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
+Streams search is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
 
 **Searcheable Properties**
 | Property          | Searchable  |
@@ -90,27 +93,36 @@ The search functionality for streams is exposed through the REST API and the cli
 | ACL | No		  |
 | Owner | No		  |
 
-``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
-
-**Request**
-Searching for streams is also possible using the REST API and specifying the optional `query` parameter, as shown here:
+####Request####
+Search for streams using the REST API and specifying the optional `query` parameter:
  ```text
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query={query}&skip={skip}&count={count}
  ```
-**.NET Library**
-The syntax of the client libraries method is as follows:
+#####Parameters#####
+`string query`  
+An optional parameter representing a string search. 
+
+`int skip`  
+An optional parameter representing the zero-based offset of the first SdsStream to retrieve. 
+If not specified, a default value of 0 is used.
+
+`int count`  
+An optional parameter representing the maximum number of SdsStreams to retrieve. 
+If not specified, a default value of 100 is used.
+
+``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
+####.NET client libraries method ####
 ```csharp
       _metadataService.GetStreamsAsync(query:"QueryString", skip:0, count:100);
 ```
 
-The Stream fields valid for search are identified in the fields table located on the [Streams](xref:sdsStreams) page. Note that Stream Metadata has unique 
-syntax rules, see [How Searching Works: Stream Metadata](#Stream_Metadata_search_topic).
+The Stream fields valid for search are identified in the fields table located on the [Streams](xref:sdsStreams) page. Note that Stream Metadata has unique syntax rules, see [How Searching Works: Stream Metadata](#Stream_Metadata_search_topic).
 
-## Search for types
-The search functionality for types is exposed through REST API and the client libraries method ``GetTypesAsync``. The query syntax and the request parameters are the same. 
-The only difference is the resource you're searching on, and you can search on different properties for types than for streams. The searchable properties are below. 
+## Search for types ##
+Types search is exposed through the REST API and the client libraries method ``GetTypesAsync``. 
+
 See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType properties.
-
+**Searcheable Properties**
 | Property          | Searchable |
 |-------------------|------------|
 | Id                | Yes        |
@@ -119,28 +131,35 @@ See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType p
 | SdsTypeCode       | No         |
 | InterpolationMode | No         |
 | ExtrapolationMode | No         |
-| Properties        | Yes, with limitations |
+| Properties*        | Yes, with limitations |
 
+The Properties field is identified as being searchable but with limitations: each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
 
-``GetTypesAsync`` is an overloaded method that is used to search for and return types. 
-
-The syntax of the client libraries method is as follows:
-```csharp
-      _metadataService.GetTypesAsync(query:"QueryString", skip:0, count:100);
-```
-
-As previously mentioned, searching for types is also possible using the REST API and specifying the optional `query` parameter, as shown here:
+####Request####
+Search for types using the REST API and specifying the optional `query` parameter:
  ```text
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Types?query={query}&skip={skip}&count={count}
  ```
+#####Parameters#####
+`string query`  
+An optional parameter representing a string search. 
 
-The Type fields valid for search are identified in the fields table located on the [Types](xref:sdsTypes) page. The Properties field is identified
-as being searchable but with limitations: Each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested
-SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
+`int skip`  
+An optional parameter representing the zero-based offset of the first SdsType to retrieve. 
+If not specified, a default value of 0 is used.
 
-## Search for stream views
-The search functionality for stream views is also exposed through REST API and the client libraries method ``GetStreamViewsAsync``. The query syntax and the request parameters are the same. 
-The only difference is the resource you're searching on, and you can match on different properties for stream views than for streams and types. 
+`int count`  
+An optional parameter representing the maximum number of SdsTypes to retrieve. 
+If not specified, a default value of 100 is used.
+
+``GetTypesAsync`` is an overloaded method that is used to search for and return types. 
+####.NET client libraries method ####
+```csharp
+      _metadataService.GetTypesAsync(query:"QueryString", skip:0, count:100);
+```
+## Search for stream views ##
+Stream views search is exposed through the REST API and the client libraries methodd ``GetStreamViewsAsync``. 
+
 The searchable properties are below. See [Stream Views](xref:sdsStreamViews) for more information.
 
 | Property     | Searchable |
