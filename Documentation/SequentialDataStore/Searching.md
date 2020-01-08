@@ -14,9 +14,9 @@ stream1      | tempA     | The temperature from DeviceA
 stream2      | pressureA | The pressure from DeviceA
 stream3      | calcA     | Calculation from DeviceA values
 
-A ``GetStreamsAsync`` call with different ``Query`` values will return the content below:
+A ``GetStreamsAsync`` call with different ``query`` values will return the content below:
 
-**QueryString**     | **Streams returned**
+**Query String**     | **Streams returned**
 ------------------  | ----------------------------------------
 ``temperature``  | Only stream1 returned.
 ``calc*``        | Only stream3 returned.
@@ -118,7 +118,7 @@ The Stream fields valid for search are identified in the fields table located on
 ## Search for types
 Types search is exposed through the REST API and the client libraries method ``GetTypesAsync``. 
 
-See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType properties.
+For more information on SdsType properties, see [Types](xref:sdsTypes#typepropertiestable) .
 **Searcheable Properties**
 | Property          | Searchable |
 |-------------------|------------|
@@ -130,7 +130,7 @@ See [Types](xref:sdsTypes#typepropertiestable) for more information on SdsType p
 | ExtrapolationMode | No         |
 | Properties        | Yes, with limitations* |
 
-The Properties field is identified as being searchable but with limitations: each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
+The Properties field is searchable but with limitations: each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
 
 #### Request
 Search for types using the REST API and specifying the optional `query` parameter:
@@ -195,37 +195,35 @@ If not specified, a default value of 100 is used.
 ## Tokenization
 Tokenization is the process of breaking a string sequence into pieces called tokens using specific characters to delimit tokens. User- specified queries are tokenized into search terms. How the query string is tokenized can affect search results.
 
-Delimit the terms with 1) a space or 2) one or more punctuation characters (``*``, ``!``, ``?``, ``.``, for example) and a space. Query string follwed by other punctuation characters without space does not trigger tokenization and is treated as part of the term. 
+Delimit the terms with 1) a space, or 2) one or more punctuation characters (``*``, ``!``, ``?``, ``.``, for example) and a space. Query string follwed by other punctuation characters without space does not trigger tokenization and is treated as part of the term. 
 
 If your query has a wildcard (``*``) operator after a trailing punctuation, neither the punctuation character or the wildcard operator is tokenized. To specifically search on a term that has trailing punctuation, enclose it in quotation marks 
 to ensure the punctuation is part of the query. See examples below:
 
  Term | Tokenized Term | Details
 ----------|--------------|-----------
-``Device.1`` | ``Device.1``| ``.1`` is included in the token because there is no space between it and ``Device``
-``Device!!1`` | ``Device!!1``| ``!!1`` is included in the token because there is no space between it and ``Device``
+``Device.1`` | ``Device.1``| The token includes ``.1`` because there is no space between it and ``Device``
+``Device!!1`` | ``Device!!1``| The token includes ``!!1`` because there is no space between it and ``Device``
 ``Device. ``  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term
 ``Device!!`` | ``Device``| 
-``Device!*`` | ``Device``| ``!*`` is not included in the token because a wildcard operator following a punctuation character is not tokenized
-``"Device!"*`` | ``Device!``
-
+``Device!*`` | ``Device``| The token does not include ``!*`` because a wildcard operator after a punctuation character is not tokenized
+``"Device!"*`` | ``Device!``| ``Device!`` is the token because the string is enclosed in double quotes
 
 ## Search operators
-You can use search operators in the ``query`` string to get more refined search results. Operators ``AND``,``OR``, and ``NOT`` must be in all caps. 
+You can use search operators in the ``query`` string to get more refined search results. Use operators ``AND``,``OR``, and ``NOT`` in all caps. 
 
-Operators | Description
+Operator | Description
 ----------|-------------------------------------------------------------------
-``AND`` | AND operator. ``cat AND dog`` searches for instances containing both "cat" and "dog".  
-``OR``  | OR operator. ``cat OR dog`` searches for instances containing either "cat" or "dog", or both. 
-``NOT`` | NOT operator. ``cat NOT dog`` searches for instances with "cat" or without "dog".
-``*``   | Wildcard operator. Matches 0 or more characters in a word. ``log*`` searches for terms starting with "log" ("log", "logs" or "logger" for example.); ignores case.
-``:``   | Field-scoped query. Specifies a field to search on.  For example, ``id:stream*`` will search for streams where the ``id`` field starts with "stream", but will not search on other fields like ``name`` or ``description``. See 
-``" "`` | Quote operator. This searches on an exact sequence of characters rather than searching on words separated by spaces or punctuation.  For example, while ``dog food`` (without quotes) searches for streams containing "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match streams that contain the whole string together and in that order.
-``( )`` | Precedence operator. For example, ``motel AND (wifi OR luxury)`` searches for streams containing "motel" and either "wifi" and/or "luxury".
+``AND`` | AND operator. ``cat AND dog`` searches for strings containing both "cat" and "dog".  
+``OR``  | OR operator. ``cat OR dog`` searches for strings containing either "cat" or "dog", or both. 
+``NOT`` | NOT operator. ``cat NOT dog`` searches for strings with "cat" or without "dog".
+``*``   | Wildcard operator. Matches 0 or more characters in a word. ``log*`` searches for strings starting with "log" ("log", "logs" or "logger" for example.); ignores case.
+``:``   | Field-scoped query. Specifies a field to search. For example, ``id:stream*`` will search for streams where the ``id`` field starts with "stream", but will not search on other fields like ``name`` or ``description``. See [: Operator] (#-operator) below.
+``" "`` | Quote operator. Scopes the search to an exact sequence of characters rather than searching on strings separated by spaces or punctuation.  For example, while ``dog food`` (without quotes) searches for strings containing "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match instances that contain the whole string together and in that order.
+``( )`` | Precedence operator. ``motel AND (wifi OR luxury)`` searches for strings containing "motel" and either "wifi" or "luxury", or "wifi" and "luxury".
 
 ### : Operator
-
-You can also qualify which fields are searched by using the following syntax: 
+You can qualify the search to a specific field using the ``:`` operator.  
 
 	fieldname:fieldvalue
 
@@ -234,14 +232,13 @@ You can also qualify which fields are searched by using the following syntax:
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure
  ```
 
-**.NET Library**
+#### .NET client libraries method
 ```csharp
 	GetStreamsAsync(query:"name:pump name:pressure");
 ```
 
 ### \* Operator
-
-You can use the ``'*'`` character as a wildcard to specify an incomplete string. A wildcard can only be used once for each search term, except for the case of a Contains type query clause. In that case two wildcards are allowed - one at the beginning and one at the end of the term.  For example, ``*Tank*`` is valid but ``*Ta*nk``, ``Ta*nk*``, and ``*Ta*nk*`` are currently not supported.
+You can use the wildcard operator (``*``) to complement an incomplete string. It can only be used once per search term, unless in a 'Contains-type' query clause: one at the beginning and another at the end (``*Tank*`` but not ``*Ta*nk``, ``Ta*nk*`` or ``*Ta*nk*``, for example).
 
 **Query string**     | **Matches field value** | **Does not match field value**
 ------------------ | --------------------------------- | -----------------------------
@@ -254,18 +251,17 @@ You can use the ``'*'`` character as a wildcard to specify an incomplete string.
 ------------------ | ----------------------------------------
 ``*``<br>``*log``<br>``l*g``<br>``log*``<br>``*log*`` <br>``"my log"*``	| ``*l*g*``<br>``*l*g``<br>``l*g*`` <br>``"my"*"log"``
 
-**Request**
+#### Request
  ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=log*
  ```
 
-**.NET Library**
+#### .NET client libraries method
 ```csharp
 	GetStreamsAsync(query:"log*");
 ```
 
 ### \"" Operator	
------
 The search engine automatically searches on strings delimited by whitespace and punctuation.  To search for values that include these delimiters, enclose the value in double quotes.	
 
 When using double quotes, the matching string must include the whole value of the field on the object being searched.  Partial strings will not be matched unless wildcards are used.  For example, if you're searching on a stream that has a description of ``Pump three on unit five``, a query of ``"unit five"`` will not match the description, but a query of ``*"unit five"`` will.
@@ -280,12 +276,12 @@ Also, wildcards can be used on the *outside* of the quote operators, but if an a
 ``*"pump pressure"*`` | pump pressure <br> pump pressure gauge <br> the pump pressure gauge | pressure <br> pressure pump 
 ``"pump*pressure"`` | pump\*pressure | pump pressure <br> the pump pressure gauge
 
- **Request**	
- ```text	
+#### Request
+```text	
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query="pump pressure"	
- ```	
+```	
 
- **.NET Library**	
+#### .NET client libraries method
 ```csharp	
 	GetStreamsAsync(query:"pump pressure");	
 ```	
@@ -304,8 +300,7 @@ Also, wildcards can be used on the *outside* of the quote operators, but if an a
 
 
 ## <a name="Stream_Metadata_search_topic">How Searching Works: Stream Metadata</a>
-
-[Stream Metadata](xref:sdsStreamExtra) modifies the aforementioned search syntax rules and each operator's behavior is described below. 
+[Stream Metadata](xref:sdsStreamExtra) modifies the aforementioned search syntax rules. 
 For example, assume that a namespace contains the following Streams and the respective Metadata Key-Value pair(s) for each stream.
 
 **streamId** | **Metadata**
@@ -330,12 +325,12 @@ Values are searched against (along with the other searchable Stream fields).
 ``company``  | Only stream1 returned.
 ``a*``  | All three streams returned.
 
-**Request**
+#### Request
  ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=manufacturer:company
  ```
 
-**.NET Library**
+#### .NET client libraries method
 ```csharp
 	GetStreamsAsync(query:"manufacturer:company");
 ```
@@ -357,12 +352,12 @@ this wildcard character can be used with the Metadata key as well. This is not s
 Note that in the final example nothing matches on a Stream's Id value because including ``'*'`` in a search clause's 
 field prevents non-Stream Metadata fields from being searched.
 
-**Request**
+#### Request
  ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=manufa*turer:compan*
  ```
 
-**.NET Library**
+#### .NET client libraries method
 ```csharp
 	GetStreamsAsync(query:"manufa*turer:compan*");
 ```
