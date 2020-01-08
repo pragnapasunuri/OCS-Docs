@@ -23,8 +23,7 @@ A ``GetStreamsAsync`` call with different ``Query`` values will return the conte
 ``DeviceA*``     | All three streams returned.
 ``humidity*``    | No streams returned.
 
-**Request**
-
+#### Requests
 The ``orderby`` parameter supports search in streams and types. Use it to return the result in a sorted order. The default value for this  parameter is ascending. For descending order, specify ``desc`` after the ``orderby`` field value. It can be used in conjunction with ``query``, ``skip``, and ``count`` parameters.
 
  ```text
@@ -36,8 +35,7 @@ The ``orderby`` parameter supports search in streams and types. Use it to return
 
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name desc&skip=10&count=20
  ```
-**Parameters**
-
+##### Parameters
 `string query`  
 An optional parameter representing a string search. 
 
@@ -52,8 +50,7 @@ If not specified, a default value of 100 is used.
 `string orderby`  
 An optional parameter representing sorted order which SdsStreams will be returned. A field name is required. The sorting is based on the stored values for the given field (of type string). For example, ``orderby=name`` would sort the returned results by the ``name`` values (ascending by default). Additionally, a value can be provided along with the field name to identify whether to sort ascending or descending, by using values ``asc`` or ``desc``, respectively. For example, ``orderby=name desc`` would sort the returned results by the ``name`` values, descending. If no value is specified, there is no sorting of results.
 
-**.NET Library**
-
+#### .NET client libraries method
 Use parameters ``skip`` and ``count`` to return what you need when a large number of results match the ``query`` criteria.``count`` indicates the maximum number of items returned by the ``GetStreamsAsync()`` or ``GetTypesAsync()`` call. The maximum value of 
 the ``count`` parameter is 1000. ``skip`` indicates the number of matched items to skip over before returning matching items. You use the skip parameter when more items match the search criteria than can be returned in a single call. 
 
@@ -110,8 +107,8 @@ If not specified, a default value of 0 is used.
 An optional parameter representing the maximum number of SdsStreams to retrieve. 
 If not specified, a default value of 100 is used.
 
-``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
 #### .NET client libraries method
+``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
 ```csharp
       _metadataService.GetStreamsAsync(query:"QueryString", skip:0, count:100);
 ```
@@ -152,8 +149,8 @@ If not specified, a default value of 0 is used.
 An optional parameter representing the maximum number of SdsTypes to retrieve. 
 If not specified, a default value of 100 is used.
 
-``GetTypesAsync`` is an overloaded method that is used to search for and return types. 
 #### .NET client libraries method
+``GetTypesAsync`` is an overloaded method that is used to search for and return types. 
 ```csharp
       _metadataService.GetTypesAsync(query:"QueryString", skip:0, count:100);
 ```
@@ -189,46 +186,41 @@ If not specified, a default value of 0 is used.
 An optional parameter representing the maximum number of SdsStreamView to retrieve. 
 If not specified, a default value of 100 is used.
 
-``GetStreamViewsAsync`` is an overloaded method that is used to search for and return stream views. 
-
 #### .NET client libraries method
+``GetStreamViewsAsync`` is an overloaded method that is used to search for and return stream views. 
 ```csharp
     _metadataService.GetStreamViewsAsync(query:"QueryString", skip:0, count:100);
 ```
 
 ## Tokenization
-Tokenization is the process of breaking a string sequence into pieces called tokens using specific characters to delimit tokens. User- specified queries are tokenized into search terms during search. 
+Tokenization is the process of breaking a string sequence into pieces called tokens using specific characters to delimit tokens. User- specified queries are tokenized into search terms. How the query string is tokenized can affect search results.
 
-The rules around how the query string is tokenized can affect the search results. 
-Terms are delimited by spaces or by one or more punctuation characters followed by a space. 
-
-Punctuation follwed by other characters without space does not trigger tokenization and is treated
+Terms are delimited by spaces or by one or more punctuation characters followed by a space. Punctuation follwed by other characters without space does not trigger tokenization and is treated
 as part of the term. 
 
-If your query has a wildcard after trailing punctuation, neither is tokenized. To specifically search on a term that has trailing punctuation, enclose it in quotation marks 
+If your query has a wildcard (\*) after trailing punctuation, neither is tokenized. To specifically search on a term that has trailing punctuation, enclose it in quotation marks 
 to ensure the punctuation is part of the query. See examples below:
 
- Term | Tokenized Term
-----------|--------------
-``Device.1`` | ``Device.1``
-``Device!!1`` | ``Device!!1``
-``Device. ``  | ``Device``
-``Device!!`` | ``Device``
+ Term | Tokenized Term | Details
+----------|--------------|-----------
+``Device.1`` | ``Device.1``| ``.1`` is included in the token because there is no space between it and ``Device``
+``Device!!1`` | ``Device!!1``| ``!!1`` is included in the token because there is no space between it and ``Device``
+``Device. ``  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term
+``Device!!`` | ``Device``| 
 ``Device!*`` | ``Device``
 ``"Device!"*`` | ``Device!``
 
 
 ## Search operators
-
-You can specify search operators in the ``query`` string to return more specific search results. 
+You can use search operators in the ``query`` string to get more refined search results. Operators ``AND``,``OR``, and ``NOT`` must be in all caps. 
 
 Operators | Description
 ----------|-------------------------------------------------------------------
-``AND`` | AND operator. For example, ``cat AND dog`` searches for streams containing both "cat" and "dog".  AND must be in all caps.
-``OR``  | OR operator. For example, ``cat OR dog`` searches for streams containing either "cat" or "dog" or both.  OR must be in all caps.
-``NOT`` | NOT operator. For example, ``cat NOT dog`` searches for streams that have the "cat" term or do not have "dog".  NOT must be in all caps.
-``*``   | Wildcard operator. This matches 0 or more characters in a word.  For example, ``log*`` searches for streams that have a term that starts with "log" (e.g. "log", "logs" or "logger"), ignoring case.
-``:``   | Field-scoped query.  This specifies a particular field to search on.  For example, ``id:stream*`` will search for streams where the ``id`` field starts with "stream", but will not search on other fields like ``name`` or ``description``.
+``AND`` | AND operator. ``cat AND dog`` searches for instances containing both "cat" and "dog".  
+``OR``  | OR operator. ``cat OR dog`` searches for instances containing either "cat" or "dog", or both. 
+``NOT`` | NOT operator. ``cat NOT dog`` searches for instances with "cat" or without "dog".
+``*``   | Wildcard operator. Matches 0 or more characters in a word. ``log*`` searches for terms starting with "log" ("log", "logs" or "logger" for example.); ignores case.
+``:``   | Field-scoped query. Specifies a field to search on.  For example, ``id:stream*`` will search for streams where the ``id`` field starts with "stream", but will not search on other fields like ``name`` or ``description``. See 
 ``" "`` | Quote operator. This searches on an exact sequence of characters rather than searching on words separated by spaces or punctuation.  For example, while ``dog food`` (without quotes) searches for streams containing "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match streams that contain the whole string together and in that order.
 ``( )`` | Precedence operator. For example, ``motel AND (wifi OR luxury)`` searches for streams containing "motel" and either "wifi" and/or "luxury".
 
