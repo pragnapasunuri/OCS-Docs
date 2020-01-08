@@ -2,7 +2,7 @@
 uid: sdsSearching
 ---
 
-# Search
+# Search in SDS
 
 You can search for texts, fields and others in Sequential Data Store (SDS). The ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync`` overloads return items that match specific search criteria within a given namespace. By default, the query parameter applies to all searchable object fields.
 
@@ -195,10 +195,9 @@ If not specified, a default value of 100 is used.
 ## Tokenization
 Tokenization is the process of breaking a string sequence into pieces called tokens using specific characters to delimit tokens. User- specified queries are tokenized into search terms. How the query string is tokenized can affect search results.
 
-Terms are delimited by spaces or by one or more punctuation characters followed by a space. Punctuation follwed by other characters without space does not trigger tokenization and is treated
-as part of the term. 
+Delimit the terms with 1) a space or 2) one or more punctuation characters (``*``, ``!``, ``?``, ``.``, for example) and a space. Query string follwed by other punctuation characters without space does not trigger tokenization and is treated as part of the term. 
 
-If your query has a wildcard (\*) after trailing punctuation, neither is tokenized. To specifically search on a term that has trailing punctuation, enclose it in quotation marks 
+If your query has a wildcard (``*``) operator after a trailing punctuation, neither the punctuation character or the wildcard operator is tokenized. To specifically search on a term that has trailing punctuation, enclose it in quotation marks 
 to ensure the punctuation is part of the query. See examples below:
 
  Term | Tokenized Term | Details
@@ -207,7 +206,7 @@ to ensure the punctuation is part of the query. See examples below:
 ``Device!!1`` | ``Device!!1``| ``!!1`` is included in the token because there is no space between it and ``Device``
 ``Device. ``  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term
 ``Device!!`` | ``Device``| 
-``Device!*`` | ``Device``
+``Device!*`` | ``Device``| ``!*`` is not included in the token because a wildcard operator following a punctuation character is not tokenized
 ``"Device!"*`` | ``Device!``
 
 
