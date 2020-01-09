@@ -4,14 +4,14 @@ uid: sdsSearching
 
 # Search in SDS
 
-You can search for texts, fields and others in Sequential Data Store (SDS). The ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync`` overloads return items that match specific search criteria within a given namespace. By default, the query parameter applies to all searchable object fields.
+You can search for texts, phrases and fields in Sequential Data Store (SDS). The REST API requests (or .NET client libraries methods) ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync`` overloads return items that match specific search criteria within a given namespace. By default, the query parameter applies to all searchable object fields.
 
-For example, let's say a namespace contains the following streams:
+Let's say a namespace contains the following streams:
 
 **streamId** | **Name**  | **Description**
 ------------ | --------- | ----------------
-stream1      | tempA     | The temperature from DeviceA
-stream2      | pressureA | The pressure from DeviceA
+stream1      | tempA     | Temperature from DeviceA
+stream2      | pressureA | Pressure from DeviceA
 stream3      | calcA     | Calculation from DeviceA values
 
 A ``GetStreamsAsync`` call with different ``query`` values will return the content below:
@@ -195,39 +195,39 @@ If not specified, a default value of 100 is used.
 ## Tokenization
 Tokenization is the process of breaking a string sequence into pieces called tokens using specific characters to delimit tokens. User- specified queries are tokenized into search terms. How the query string is tokenized can affect search results.
 
-Delimit the terms with 1) a space, or 2) one or more punctuation characters (``*``, ``!``, ``?``, ``.``, for example) and a space. Query string follwed by other punctuation characters without space does not trigger tokenization and is treated as part of the term. 
+Delimit the terms with 1) a space, or 2) one or more punctuation characters (``*``, ``!``, ``?``, ``.``, for example) and a space. Query string follwed without space by other punctuation characters does not trigger tokenization and is treated as part of the term. 
 
-If your query has a wildcard (``*``) operator after a trailing punctuation, neither the punctuation character or the wildcard operator is tokenized. To specifically search on a term that has trailing punctuation, enclose it in quotation marks 
+If your query has a wildcard (``*``) operator following a punctuation character, neither the punctuation nor the wildcard operator is tokenized. To specifically search for a term that has trailing punctuation, enclose the string in quotation marks 
 to ensure the punctuation is part of the query. See examples below:
 
  Term | Tokenized Term | Details
 ----------|--------------|-----------
-``Device.1`` | ``Device.1``| The token includes ``.1`` because there is no space between it and ``Device``
-``Device!!1`` | ``Device!!1``| The token includes ``!!1`` because there is no space between it and ``Device``
-``Device. ``  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term
+``Device.1`` | ``Device.1``| The token includes ``.1`` because there is no space between it and ``Device``.
+``Device!!1`` | ``Device!!1``| The token includes ``!!1`` because there is no space between it and ``Device``.
+``Device. ``  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term.
 ``Device!!`` | ``Device``| 
-``Device!*`` | ``Device``| The token does not include ``!*`` because a wildcard operator after a punctuation character is not tokenized
-``"Device!"*`` | ``Device!``| ``Device!`` is the token because the string is enclosed in double quotes
+``Device!*`` | ``Device``| The token does not include ``!*`` because a wildcard operator after a punctuation character is not tokenized.
+``"Device!"*`` | ``Device!``| ``Device!`` is the token because the string is enclosed in double quotes.
 
 ## Search operators
 You can use search operators in the ``query`` string to get more refined search results. Use operators ``AND``,``OR``, and ``NOT`` in all caps. 
 
 Operator | Description
 ----------|-------------------------------------------------------------------
-``AND`` | AND operator. ``cat AND dog`` searches for strings containing both "cat" and "dog".  
-``OR``  | OR operator. ``cat OR dog`` searches for strings containing either "cat" or "dog", or both. 
-``NOT`` | NOT operator. ``cat NOT dog`` searches for strings with "cat" or without "dog".
-``*``   | Wildcard operator. Matches 0 or more characters in a word. ``log*`` searches for strings starting with "log" ("log", "logs" or "logger" for example.); ignores case.
-``:``   | Field-scoped query. Specifies a field to search. For example, ``id:stream*`` will search for streams where the ``id`` field starts with "stream", but will not search on other fields like ``name`` or ``description``. See [: Operator] (#-operator) below.
-``" "`` | Quote operator. Scopes the search to an exact sequence of characters rather than searching on strings separated by spaces or punctuation.  For example, while ``dog food`` (without quotes) searches for strings containing "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match instances that contain the whole string together and in that order.
-``( )`` | Precedence operator. ``motel AND (wifi OR luxury)`` searches for strings containing "motel" and either "wifi" or "luxury", or "wifi" and "luxury".
+``AND`` | AND operator. ``cat AND dog`` searches for both "cat" and "dog".  
+``OR``  | OR operator. ``cat OR dog`` searches for either "cat" or "dog", or both. 
+``NOT`` | NOT operator. ``cat NOT dog`` searches for "cat" or strings without "dog".
+``*``   | Wildcard operator. Matches 0 or more characters. ``log*`` searches for strings starting with "log" ("log", "logs" or "logger" for example.); ignores case.
+``:``   | Field-scoped query. Specifies a field to search. ``id:stream*`` searches for streams whose ``id`` field starts with "stream", but will not search other fields like ``name`` or ``description``. See [: Operator] (#-operator) below.
+``" "`` | Quote operator. Scopes the search to an exact sequence of characters. While ``dog food`` (without quotes) searches for strings with "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match instances that contain the whole string together and in that order.
+``( )`` | Precedence operator. ``motel AND (wifi OR luxury)`` searches for strings either "wifi" or "luxury", or "wifi" and "luxury" at the intersection of "motel".
 
 ### : Operator
 You can qualify the search to a specific field using the ``:`` operator.  
 
 	fieldname:fieldvalue
 
-**Request**
+#### Request
  ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure
  ```
@@ -238,7 +238,7 @@ You can qualify the search to a specific field using the ``:`` operator.
 ```
 
 ### \* Operator
-You can use the wildcard operator (``*``) to complement an incomplete string. It can only be used once per search term, unless in a 'Contains-type' query clause: one at the beginning and another at the end (``*Tank*`` but not ``*Ta*nk``, ``Ta*nk*`` or ``*Ta*nk*``, for example).
+You can use the wildcard operator (``*``) to complement an incomplete string. It can only be used once per search term, unless in a 'contains-type' query clause: one at the beginning and another at the end (``*Tank*`` but not ``*Ta*nk``, ``Ta*nk*`` or ``*Ta*nk*``, for example).
 
 **Query string**     | **Matches field value** | **Does not match field value**
 ------------------ | --------------------------------- | -----------------------------
@@ -262,11 +262,11 @@ You can use the wildcard operator (``*``) to complement an incomplete string. It
 ```
 
 ### \"" Operator	
-The search engine automatically searches on strings delimited by whitespace and punctuation.  To search for values that include these delimiters, enclose the value in double quotes.	
+The search is done on strings delimited by whitespace and punctuation. To perform a search that include these delimiters, enclose them in double quotes.	
 
-When using double quotes, the matching string must include the whole value of the field on the object being searched.  Partial strings will not be matched unless wildcards are used.  For example, if you're searching on a stream that has a description of ``Pump three on unit five``, a query of ``"unit five"`` will not match the description, but a query of ``*"unit five"`` will.
+When using double quotes, the matching string must include the whole value of the field on the object being searched. Partial strings will not be matched unless wildcards are used. For example, if you're searching for a stream with description ``Pump three on unit five``, a query ``"unit five"`` will not match the description, but ``*"unit five"`` will.
 
-Also, wildcards can be used on the *outside* of the quote operators, but if an asterisk is on the inside of the quotes, it is treated as a string literal rather than a wildcard operator.  For example, you can search for ``"dog food"*`` to find a string that starts with "dog food", but if you search for ``"dog food*"``, it will only match on a value of "dog food*".
+Note that while wildcard (``*``) can be used either in or outside of quotes, it is treated as a string literal inside quotes.  For example, you can search for ``"dog food"*`` to find a string that starts with "dog food", but if you search for ``"dog food*"``, it will only match the value of "dog food*".
 
  **Query string**     | **Matches field value** | **Does not match field value**	
 ------------------ | --------------------------------- | -----------------------------	
