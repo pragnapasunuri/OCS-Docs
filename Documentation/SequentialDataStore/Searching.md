@@ -271,7 +271,7 @@ You can use the wildcard operator (``*``) to complement an incomplete string. It
 ```
 
 ### Double quotes (``""``) Operator	
-The search is done on strings delimited by whitespace and punctuation. To perform a search that includes these delimiters, enclose them in double quotes.	
+Tokenized search terms are delimited by whitespace and punctuation. To include these delimiters in a search, enclose them in double quotes.	
 
 When using double quotes, the matching string must include the whole value of the field on the object being searched. Partial strings will not be matched unless wildcards are used. For example, if you're searching for a stream with description ``Pump three on unit five``, a query ``"unit five"`` will not match the description, but ``*"unit five"`` will.
 
