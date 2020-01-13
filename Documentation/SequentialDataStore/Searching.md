@@ -70,6 +70,8 @@ By setting ``skip`` to 100, the following call will return the remaining 75 matc
 ## Search for streams
 Streams search is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
 
+For more information on SdsStreams properties, see [Streams](xref:sdsStreams#streampropertiestable).
+
 **Searcheable Properties**
 | Property          | Searchable  |
 |-------------------|-------------|
@@ -118,7 +120,8 @@ The Stream fields valid for search are identified in the fields table located on
 ## Search for types
 Types search is exposed through the REST API and the client libraries method ``GetTypesAsync``. 
 
-For more information on SdsType properties, see [Types](xref:sdsTypes#typepropertiestable) .
+For more information on SdsType properties, see [Types](xref:sdsTypes#typepropertiestable).
+
 **Searcheable Properties**
 | Property          | Searchable |
 |-------------------|------------|
@@ -157,7 +160,8 @@ If not specified, a default value of 100 is used.
 ## Search for stream views
 Stream views search is exposed through the REST API and the client libraries methodd ``GetStreamViewsAsync``. 
 
-The searchable properties are below. See [Stream Views](xref:sdsStreamViews) for more information.
+For more information on SdsStreamViews properties, see [Stream Views](xref:sdsStreamViews#streamviewpropertiestable).
+
 **Searcheable Properties**
 | Property     | Searchable |
 |--------------|------------|
@@ -167,7 +171,7 @@ The searchable properties are below. See [Stream Views](xref:sdsStreamViews) for
 | SourceTypeId | Yes		|
 | TargetTypeId | Yes		|
 | Properties   | Yes, with limitations* |
-The Stream View fields valid for search are identified in the fields table located on the [Stream Views](xref:sdsStreamViews) page. The Properties field is identified as being searchable but with limitations because SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties.
+The Properties field is identified as being searchable but with limitations because SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties.
 
 #### Request
 Search for stream views using the REST API and specifying the optional `query` parameter:
