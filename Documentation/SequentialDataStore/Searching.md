@@ -310,7 +310,7 @@ stream3      | { status, active }<br>{ second key, second value }
  
 
 ### Field-scoping (``:``) Operator
-A stream metadata key is only searchable in association with its value. This pairing is defined using the field-scoping ``:`` operator. 
+A stream metadata key is only searchable in association with its value. This pairing is defined using the field-scoping (``:``) operator. 
 
 	myStreamMetadataKey:myStreamMetadataValue
 
