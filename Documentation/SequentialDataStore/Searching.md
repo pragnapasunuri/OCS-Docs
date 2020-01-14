@@ -222,7 +222,7 @@ Operator | Description
 ``OR``  | OR operator. ``cat OR dog`` searches for either "cat" or "dog", or both. 
 ``NOT`` | NOT operator. ``cat NOT dog`` searches for "cat" or strings without "dog".
 ``*``   | Wildcard operator. Matches 0 or more characters. ``log*`` searches for strings starting with "log" ("log", "logs" or "logger" for example.); ignores case.
-``:``   | Field-scoped query. Specifies a field to search. ``id:stream*`` searches for streams whose ``id`` field starts with "stream", but will not search other fields like ``name`` or ``description``. See [Field-scoping operator] (#fieldScope) below.
+``:``   | Field-scoped query. Specifies a field to search. ``id:stream*`` searches for streams whose ``id`` field starts with "stream", but will not search other fields like ``name`` or ``description``. See [Field-scoping operator] (#fieldScoped) below.
 ``" "`` | Quote operator. Scopes the search to an exact sequence of characters. While ``dog food`` (without quotes) searches for strings with "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match instances that contain the whole string together and in that order.
 ``( )`` | Precedence operator. ``motel AND (wifi OR luxury)`` searches for strings either "wifi" or "luxury", or "wifi" and "luxury" at the intersection of "motel".
 
@@ -300,7 +300,7 @@ Note that while wildcard (``*``) can be used either in or outside of quotes, it 
 ```	
 
 ## <a name="Stream_Metadata_search_topic">How search works with stream metadata</a>
-[Stream metadata](xref:sdsStreamExtra) behaves differently with search syntax rules described in the previous sections. To demonstrate the difference, we'll assume that a namespace contains streams below with respective Metadata Key-Value pair(s) for each stream.
+[Stream metadata](xref:sdsStreamExtra) behaves differently with search syntax rules described in the previous sections. To demonstrate the difference, we'll assume that a namespace contains streams with respective Metadata Key-Value pairs below:
 
 **streamId** | **Metadata**
 ------------ | --------- 
@@ -309,16 +309,14 @@ stream2      | { serial, a1 }
 stream3      | { status, active }<br>{ second key, second value }   
  
 
-### : Operator
--------------------
-A Stream Metadata key is only searchable in association with a Stream Metadata value. This pairing is defined using the same field scoping ``':'`` operator. 
+### Field-scoping (``:``) Operator
+A stream metadata key is only searchable in association with its value. This pairing is defined using the field-scoping ``:`` operator. 
 
-	myStreamMetadataKey:streamMetadataValue
+	myStreamMetadataKey:myStreamMetadataValue
 
-If the ``':'`` operator is not used within an individual search clause then Metadata Keys are not searched against but Metadata 
-Values are searched against (along with the other searchable Stream fields).
+Metadata key is not searched if the operator (``:``) is missing in the query string: the search is limited to metadata values along with other searchable fields in the stream.
 
-**QueryString**     | **Streams returned**
+**Query string**     | **Streams returned**
 ------------------  | ----------------------------------------
 ``manufacturer:company``  | Only stream1 returned.
 ``company``  | Only stream1 returned.
@@ -334,13 +332,13 @@ Values are searched against (along with the other searchable Stream fields).
 	GetStreamsAsync(query:"manufacturer:company");
 ```
 
-### \* Operator  
+### Wildcard (``*``) Operator  
 
 For searching on Metadata values the ``'*'`` character is again used as a wildcard to specify an incomplete string. Additionally,
 this wildcard character can be used with the Metadata key as well. This is not supported for any other "fields", so by including a wildcard in a field
 (defined as a value to the immediate left of a ``':'`` operator) the query will only be valid against Stream Metadata.
 
-**QueryString**     | **Streams returned**
+**Query string**     | **Streams returned**
 ------------------  | ----------------------------------------
 ``manufa*turer:compan*``  | Only stream1 returned.
 ``ser*al:a*``  | Stream1 and stream2 are returned.
