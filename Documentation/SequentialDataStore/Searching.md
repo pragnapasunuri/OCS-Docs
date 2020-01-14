@@ -204,12 +204,12 @@ Delimit the terms with 1) a space, or 2) one or more punctuation characters (``*
 If your query has a wildcard (``*``) operator after a punctuation character, neither the punctuation nor the wildcard operator is tokenized. To specifically search for a term that has trailing punctuation, enclose the string in quotation marks 
 to ensure that the punctuation is part of the query. See examples below:
 
- Term | Tokenized Term | Details
+ Term | Tokenized Term | Description
 ----------|--------------|-----------
 ``Device.1`` | ``Device.1``| The token includes ``.1`` because there is no space between it and ``Device``.
 ``Device!!1`` | ``Device!!1``| The token includes ``!!1`` because there is no space between it and ``Device``.
-``Device. ``  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term.
-``Device!! `` | ``Device``| ``!!`` and the following space demarcates ``Device`` as the token term.
+`Device. `  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term.
+`Device!! ` | ``Device``| ``!!`` and the following space demarcates ``Device`` as the token term.
 ``Device!*`` | ``Device``| The token does not include ``!*`` because a wildcard operator after a punctuation character is not tokenized.
 ``"Device!"*`` | ``Device!``| ``Device!`` is the token because the string is enclosed in double quotes.
 
@@ -222,7 +222,7 @@ Operator | Description
 ``OR``  | OR operator. ``cat OR dog`` searches for either "cat" or "dog", or both. 
 ``NOT`` | NOT operator. ``cat NOT dog`` searches for "cat" or strings without "dog".
 ``*``   | Wildcard operator. Matches 0 or more characters. ``log*`` searches for strings starting with "log" ("log", "logs" or "logger" for example.); ignores case.
-``:``   | Field-scoped query. Specifies a field to search. ``id:stream*`` searches for streams whose ``id`` field starts with "stream", but will not search other fields like ``name`` or ``description``. See [] (#fieldScope) below.
+``:``   | Field-scoped query. Specifies a field to search. ``id:stream*`` searches for streams whose ``id`` field starts with "stream", but will not search other fields like ``name`` or ``description``. See [Field-scoping operator] (#fieldScope) below.
 ``" "`` | Quote operator. Scopes the search to an exact sequence of characters. While ``dog food`` (without quotes) searches for strings with "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match instances that contain the whole string together and in that order.
 ``( )`` | Precedence operator. ``motel AND (wifi OR luxury)`` searches for strings either "wifi" or "luxury", or "wifi" and "luxury" at the intersection of "motel".
 
@@ -235,7 +235,7 @@ Operator | Description
 ``mud AND (log OR pump*)`` | mud log<br>mud pumps | mud bath
 ``name:stream* AND (description:pressure OR description:pump)`` | The name starts with "stream" and the description has the either of the terms "pressure" or "pump" | 
 
-### <a name="fieldScoped">Field scoped (``:``) Operator</a>
+### <a name="fieldScoped">Field-scoping (``:``) Operator</a>
 You can qualify the search to a specific field using the ``:`` operator.  
 
 	fieldname:fieldvalue
@@ -296,12 +296,11 @@ Note that while wildcard (``*``) can be used either in or outside of quotes, it 
 
 #### .NET client libraries method
 ```csharp	
-	GetStreamsAsync(query:"\"pump pressure\"");	
+	GetStreamsAsync(query:""pump pressure"");	
 ```	
 
-## <a name="Stream_Metadata_search_topic">How Searching Works: Stream Metadata</a>
-[Stream Metadata](xref:sdsStreamExtra) modifies the aforementioned search syntax rules. 
-For example, assume that a namespace contains the following Streams and the respective Metadata Key-Value pair(s) for each stream.
+## <a name="Stream_Metadata_search_topic">How search works with stream metadata</a>
+[Stream metadata](xref:sdsStreamExtra) behaves differently with search syntax rules described in the previous sections. To demonstrate the difference, we'll assume that a namespace contains streams below with respective Metadata Key-Value pair(s) for each stream.
 
 **streamId** | **Metadata**
 ------------ | --------- 
@@ -312,7 +311,7 @@ stream3      | { status, active }<br>{ second key, second value }
 
 ### : Operator
 -------------------
-A Stream Metadata key is only searchable in association with a Stream Metadata value. This pairing is defined using the same  field scoping ``':'`` operator. 
+A Stream Metadata key is only searchable in association with a Stream Metadata value. This pairing is defined using the same field scoping ``':'`` operator. 
 
 	myStreamMetadataKey:streamMetadataValue
 
