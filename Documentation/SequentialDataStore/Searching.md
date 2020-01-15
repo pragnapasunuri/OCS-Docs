@@ -208,7 +208,7 @@ to ensure that the punctuation is part of the query. See examples below:
 ----------|--------------|-----------
 ``Device.1`` | ``Device.1``| The token includes ``.1`` because there is no space between it and ``Device``.
 ``Device!!1`` | ``Device!!1``| The token includes ``!!1`` because there is no space between it and ``Device``.
-`Device. `  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term.
+``Device. ``  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term.
 `Device!! ` | ``Device``| ``!!`` and the following space demarcates ``Device`` as the token term.
 ``Device!*`` | ``Device``| The token does not include ``!*`` because a wildcard operator after a punctuation character is not tokenized.
 ``"Device!"*`` | ``Device!``| ``Device!`` is the token because the string is enclosed in double quotes.
@@ -296,11 +296,11 @@ Note that while wildcard (``*``) can be used either in or outside of quotes, it 
 
 #### .NET client libraries method
 ```csharp	
-	GetStreamsAsync(query:""pump pressure"");	
+	GetStreamsAsync(query:"\\"pump pressure\\"");	
 ```	
 
 ## <a name="Stream_Metadata_search_topic">How search works with stream metadata</a>
-[Stream metadata](xref:sdsStreamExtra) behaves differently with search syntax rules described in the previous sections. To demonstrate the difference, we'll assume that a namespace contains streams with respective Metadata Key-Value pairs below:
+[Stream metadata](xref:sdsStreamExtra) behaves differently with search syntax rules described in the previous sections. To demonstrate the difference, let's say that there's a namespace that contains streams with respective Metadata Key-Value pairs as shown below:
 
 **streamId** | **Metadata**
 ------------ | --------- 
@@ -316,11 +316,11 @@ A stream metadata key is only searchable in association with its value. This pai
 
 Metadata key is not searched if the operator (``:``) is missing in the query string: the search is limited to metadata values along with other searchable fields in the stream.
 
-**Query string**     | **Streams returned**
+**Query string**     | **Returns**
 ------------------  | ----------------------------------------
-``manufacturer:company``  | Only stream1 returned.
-``company``  | Only stream1 returned.
-``a*``  | All three streams returned.
+``manufacturer:company``  | stream1
+``company``  | stream1
+``a*``  | stream1, stream2, stream3
 
 #### Request
  ```text
@@ -333,18 +333,16 @@ Metadata key is not searched if the operator (``:``) is missing in the query str
 ```
 
 ### Wildcard (``*``) Operator  
-
-For searching on Metadata values the ``'*'`` character is again used as a wildcard to specify an incomplete string. Additionally,
-this wildcard character can be used with the Metadata key as well. This is not supported for any other "fields", so by including a wildcard in a field
+Wildcard (``*``) character can be used in both metada keys and values with one caveat: This is not supported for any other "fields", so by including a wildcard in a field
 (defined as a value to the immediate left of a ``':'`` operator) the query will only be valid against Stream Metadata.
 
-**Query string**     | **Streams returned**
+**Query string**     | **Returns**
 ------------------  | ----------------------------------------
-``manufa*turer:compan*``  | Only stream1 returned.
-``ser*al:a*``  | Stream1 and stream2 are returned.
-``s*:a*``  | All three streams returned.
-``Id:stream*``  |  All three streams returned.
-``Id*:stream*``  | Nothing returned.
+``manufa*turer:compan*``  | stream1
+``ser*al:a*``  | stream1, stream2
+``s*:a*``  | stream1, stream2, stream3
+``Id:stream*``  |  stream1, stream2, stream3
+``Id*:stream*``  | nothing
 
 Note that in the final example nothing matches on a Stream's Id value because including ``'*'`` in a search clause's 
 field prevents non-Stream Metadata fields from being searched.
