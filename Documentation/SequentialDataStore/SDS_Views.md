@@ -27,8 +27,8 @@ The following table shows the required and optional SdsStreamView fields. Fields
 | Description  | String                 | Optional    | Yes		   |Description text |
 | SourceTypeId | String                 | Required    | Yes		   |Identifier of the SdsType of the SdsStream |
 | TargetTypeId | String                 | Required    | Yes		   |Identifier of the SdsType to convert events to |
-| Properties   | IList\<SdsStreamViewProperty\> | Optional    | Yes, with limitations	  |Property level mapping |
-
+| Properties   | IList\<SdsStreamViewProperty\> | Optional    | Yes, with limitations*	  |Property level mapping |
+**\* Notes on Properties field:**: SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties.
 
 **Rules for the Stream View Identifier (SdsStreamView.Id)**
 
