@@ -90,7 +90,7 @@ For more information on SdsStreams properties, see [Streams](xref:sdsStreams#str
 | [Tags](xref:sdsStreamExtra)*	| Yes		  |
 | ACL | No		  |
 | Owner | No		  |
-**\* Notes on metadata and tags:** You can access stream metadata and tags through Metadata and Tags API respectively. Metadata and tags are associated with SdsStream objects and can be used as search criteria. See [below](#Stream_Metadata_search_topic) for more information.
+**\*Notes on metadata and tags:** You can access stream metadata and tags through Metadata and Tags API respectively. Metadata and tags are associated with SdsStream objects and can be used as search criteria. See [below](#Stream_Metadata_search_topic) for more information.
 
 #### Request
 Search for streams using the REST API and specifying the optional `query` parameter:
@@ -132,7 +132,7 @@ For more information on SdsType properties, see [Types](xref:sdsTypes#typeproper
 | InterpolationMode | No         |
 | ExtrapolationMode | No         |
 | Properties        | Yes, with limitations* |
-**\* Notes on Properties field:**: each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
+**\*Notes on Properties field:** each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
 
 #### Request
 Search for types using the REST API and specifying the optional `query` parameter:
@@ -169,7 +169,7 @@ For more information on SdsStreamViews properties, see [Stream Views](xref:sdsSt
 | SourceTypeId | Yes		|
 | TargetTypeId | Yes		|
 | Properties   | Yes, with limitations* |
-**\* Notes on Properties field:**: SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties.
+**\*Notes on Properties field:** SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties.
 
 #### Request
 Search for stream views using the REST API and specifying the optional `query` parameter:
