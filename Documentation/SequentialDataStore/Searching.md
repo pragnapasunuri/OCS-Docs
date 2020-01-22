@@ -4,7 +4,7 @@ uid: sdsSearching
 
 # Search in SDS
 
-You can search for texts, phrases and fields in Sequential Data Store (SDS). The REST API requests (or .NET client libraries methods) ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync`` overloads return items that match specific search criteria within a given namespace. By default, the query parameter applies to all searchable object fields.
+You can search for objects using texts, phrases and fields in Sequential Data Store (SDS). The REST API requests (or .NET client libraries methods ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync``) return items that match specific search criteria within a given namespace. By default, the query parameter applies to all searchable object fields.
 
 Let's say a namespace contains the following streams:
 
