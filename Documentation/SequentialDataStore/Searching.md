@@ -37,7 +37,7 @@ The ``orderby`` parameter supports search in streams and types. Use it to return
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing a string search. 
+An optional parameter representing the search criteria. 
 
 `int skip`  
 An optional parameter representing the zero-based offset of the first SdsStream to retrieve. 
@@ -48,7 +48,7 @@ An optional parameter representing the maximum number of SdsStreams to retrieve.
 If unspecified, a default value of 100 is used.
 
 `string orderby`  
-An optional parameter representing sorted order which SdsStreams will be returned. A field name is required. The sorting is based on the stored values for the given field (of type string). For example, ``orderby=name`` would sort the returned results by the ``name`` values (ascending by default). Additionally, a value can be provided along with the field name to identify whether to sort ascending or descending, by using values ``asc`` or ``desc``, respectively. For example, ``orderby=name desc`` would sort the returned results by the ``name`` values, descending. If no value is specified, there is no sorting of results.
+An optional parameter representing the sorted order in which SdsStreams will be returned. A field name is required. The sorting is based on the stored values for the given field (of type string). For example, ``orderby=name`` would sort the returned results by the ``name`` values (ascending by default). Additionally, a value can be provided along with the field name to identify whether to sort ascending or descending, by using values ``asc`` or ``desc``, respectively. For example, ``orderby=name desc`` would sort the returned results by the ``name`` values, descending. If no value is specified, there is no sorting of results.
 
 #### .NET client libraries method
 Use parameters ``skip`` and ``count`` to return what you need when a large number of results match the ``query`` criteria.``count`` indicates the maximum number of items returned by the ``GetStreamsAsync()`` or ``GetTypesAsync()`` call. The maximum value of 
@@ -99,7 +99,7 @@ Search for streams using the REST API and specifying the optional `query` parame
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing a string search. 
+An optional parameter representing the search criteria. 
 
 `int skip`  
 An optional parameter representing the zero-based offset of the first SdsStream to retrieve. 
@@ -141,7 +141,7 @@ Search for types using the REST API and specifying the optional `query` paramete
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing a string search. 
+An optional parameter representing the search criteria. 
 
 `int skip`  
 An optional parameter representing the zero-based offset of the first SdsType to retrieve. 
@@ -178,7 +178,7 @@ Search for stream views using the REST API and specifying the optional `query` p
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing a stream view search. 
+An optional parameter representing the search criteria for stream views. 
 
 `int skip`  
 An optional parameter representing the zero-based offset of the first SdsStreamView to retrieve. 
