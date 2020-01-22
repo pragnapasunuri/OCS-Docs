@@ -4,7 +4,7 @@ uid: sdsSearching
 
 # Search in SDS
 
-You can search for objects using texts, phrases and fields in Sequential Data Store (SDS). The REST API requests (or .NET client libraries methods ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync``) return items that match specific search criteria within a given namespace. By default, the query parameter applies to all searchable object fields.
+You can search for objects using texts, phrases and fields in Sequential Data Store (SDS). The REST API requests (or .NET client libraries methods ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync``) return items that match the search criteria within a given namespace. By default, the ``query`` parameter applies to all searchable object fields.
 
 Let's say a namespace contains the following streams:
 
@@ -14,7 +14,7 @@ stream1      | tempA     | Temperature from DeviceA
 stream2      | pressureA | Pressure from DeviceA
 stream3      | calcA     | Calculation from DeviceA values
 
-A ``GetStreamsAsync`` call with different ``query`` values will return the content below:
+A ``GetStreamsAsync`` call with different queries will return below:
 
 **Query string**     | **Returns**
 ------------------  | ----------------------------------------
@@ -24,8 +24,6 @@ A ``GetStreamsAsync`` call with different ``query`` values will return the conte
 ``humidity*``    | nothing
 
 #### Requests
-The ``orderby`` parameter supports search in streams and types. Use it to return the result in a sorted order. The default value for this  parameter is ascending. For descending order, specify ``desc`` after the ``orderby`` field value. It can be used in conjunction with ``query``, ``skip``, and ``count`` parameters.
-
  ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name
 
@@ -37,31 +35,25 @@ The ``orderby`` parameter supports search in streams and types. Use it to return
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing the search criteria. 
+An optional parameter representing the search criteria. If unspecified, returns all values. Can be used with `skip`, `count` and `orderby`.
 
 `int skip`  
-An optional parameter representing the zero-based offset of the first SdsStream to retrieve. 
-If unspecified, a default value of 0 is used.
+An optional parameter representing the zero-based offset of the first SdsStream to retrieve. The number of matched items to skip over before returning. If unspecified, a default value of 0 is used. Use when more items match the search criteria than can be returned in a single call.
 
 `int count`  
-An optional parameter representing the maximum number of SdsStreams to retrieve. 
-If unspecified, a default value of 100 is used.
+An optional parameter representing the maximum number of SdsStreams to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 `string orderby`  
-An optional parameter representing the sorted order in which SdsStreams will be returned. A field name is required. The sorting is based on the stored values for the given field (of type string). For example, ``orderby=name`` would sort the returned results by the ``name`` values (ascending by default). Additionally, a value can be provided along with the field name to identify whether to sort ascending or descending, by using values ``asc`` or ``desc``, respectively. For example, ``orderby=name desc`` would sort the returned results by the ``name`` values, descending. If no value is specified, there is no sorting of results.
+An optional parameter representing the sorted order in which SdsStreams are returned. Requires a field name (``orderby=name``, for example). Default order is ascending (``asc``). Add ``desc`` for descending order (``orderby=name desc``, for example). If unspecified, there is no sorting of results.
 
 #### .NET client libraries method
-Use parameters ``skip`` and ``count`` to return what you need when a large number of results match the ``query`` criteria.``count`` indicates the maximum number of items returned by the ``GetStreamsAsync()`` or ``GetTypesAsync()`` call. The maximum value of 
-the ``count`` parameter is 1000. ``skip`` indicates the number of matched items to skip over before returning matching items. You use the skip parameter when more items match the search criteria than can be returned in a single call. 
+If there are 175 streams that match the search criteria "temperature" in a single call for example, below will return the first 100 matches:
 
-For example, let's say there are 175 streams that match the search criteria: “temperature”.
-
-The call below will return the first 100 matches:
 ```csharp
     _metadataService.GetStreamsAsync("temperature", skip:0, count:100)
 ```
 
-By setting ``skip`` to 100, the following call will return the remaining 75 matches, skipping over the first 100:
+If ``skip`` is set to 100, the following call will return the remaining 75 matches while skipping over the first 100:
 ```csharp
     _metadataService.GetStreamsAsync("temperature", skip:100, count:100)
 ```
@@ -99,15 +91,13 @@ Search for streams using the REST API and specifying the optional `query` parame
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing the search criteria. 
+An optional parameter representing the search criteria. If unspecified, returns all values. Can be used with `skip`, `count` and `orderby`. 
 
 `int skip`  
-An optional parameter representing the zero-based offset of the first SdsStream to retrieve. 
-If unspecified, a default value of 0 is used.
+An optional parameter representing the zero-based offset of the first SdsStream to retrieve. If unspecified, a default value of 0 is used. Use when more items match the search criteria than can be returned in a single call.
 
 `int count`  
-An optional parameter representing the maximum number of SdsStreams to retrieve. 
-If unspecified, a default value of 100 is used.
+An optional parameter representing the maximum number of SdsStreams to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
 ``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
@@ -141,15 +131,13 @@ Search for types using the REST API and specifying the optional `query` paramete
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing the search criteria. 
+An optional parameter representing the search criteria. If unspecified, returns all values. Can be used with `skip`, `count` and `orderby`. 
 
 `int skip`  
-An optional parameter representing the zero-based offset of the first SdsType to retrieve. 
-If unspecified, a default value of 0 is used.
+An optional parameter representing the zero-based offset of the first SdsType to retrieve. If unspecified, a default value of 0 is used. Use when more items match the search criteria than can be returned in a single call.
 
 `int count`  
-An optional parameter representing the maximum number of SdsTypes to retrieve. 
-If unspecified, a default value of 100 is used.
+An optional parameter representing the maximum number of SdsTypes to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
 ``GetTypesAsync`` is an overloaded method that is used to search for and return types. 
@@ -178,15 +166,13 @@ Search for stream views using the REST API and specifying the optional `query` p
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing the search criteria for stream views. 
+An optional parameter representing the search criteria for stream views. If unspecified, returns all values. Can be used with `skip`, `count` and `orderby`. 
 
 `int skip`  
-An optional parameter representing the zero-based offset of the first SdsStreamView to retrieve. 
-If unspecified, a default value of 0 is used.
+An optional parameter representing the zero-based offset of the first SdsStreamView to retrieve.If unspecified, a default value of 0 is used. Use when more items match the search criteria than can be returned in a single call.
 
 `int count`  
-An optional parameter representing the maximum number of SdsStreamView to retrieve. 
-If unspecified, a default value of 100 is used.
+An optional parameter representing the maximum number of SdsStreamView to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
 ``GetStreamViewsAsync`` is an overloaded method that is used to search for and return stream views. 
