@@ -4,7 +4,7 @@ uid: sdsSearching
 
 # Search in SDS
 
-You can search for objects using texts, phrases and fields in Sequential Data Store (SDS). The REST API requests (or .NET client libraries methods ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync``) return items that match the search criteria within a given namespace. By default, the ``query`` parameter applies to all searchable object fields.
+You can search for objects using texts, phrases and fields in Sequential Data Store (SDS). The REST APIs (or .NET client libraries methods ``GetStreamsAsync``, ``GetTypesAsync``, and ``GetStreamViewsAsync``) return items that match the search criteria within a given namespace. By default, the ``query`` parameter applies to all searchable object fields.
 
 Let's say a namespace contains the following streams:
 
@@ -24,7 +24,7 @@ A ``GetStreamsAsync`` call with different queries will return below:
 ``humidity*``    | nothing
 
 #### Requests
- ```text
+ ```json
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name
 
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=id asc
@@ -59,7 +59,7 @@ If ``skip`` is set to 100, the following call will return the remaining 75 match
 ```
 
 ## Search for streams
-Streams search is exposed through the REST API call and the client libraries method ``GetStreamsAsync``.
+Streams search is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
 
 For more information on SdsStreams properties, see [Streams](xref:sdsStreams#streampropertiestable).
 
@@ -86,7 +86,7 @@ For more information on SdsStreams properties, see [Streams](xref:sdsStreams#str
 
 #### Request
 Search for streams using the REST API and specifying the optional `query` parameter:
- ```text
+ ```json
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query={query}&skip={skip}&count={count}
  ```
 ##### Parameters
@@ -100,7 +100,7 @@ An optional parameter representing the zero-based offset of the first SdsStream 
 An optional parameter representing the maximum number of SdsStreams to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
-``GetStreamsAsync`` is an overloaded method that is used to search for and return streams. When you call an overloaded method, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
+``GetStreamsAsync`` is used to search for and return streams. When called, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
 ```csharp
       _metadataService.GetStreamsAsync(query:"QueryString", skip:0, count:100);
 ```
@@ -126,7 +126,7 @@ For more information on SdsType properties, see [Types](xref:sdsTypes#typeproper
 
 #### Request
 Search for types using the REST API and specifying the optional `query` parameter:
- ```text
+ ```json
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Types?query={query}&skip={skip}&count={count}
  ```
 ##### Parameters
@@ -140,7 +140,7 @@ An optional parameter representing the zero-based offset of the first SdsType to
 An optional parameter representing the maximum number of SdsTypes to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
-``GetTypesAsync`` is an overloaded method that is used to search for and return types. 
+``GetTypesAsync`` is used to search for and return types. 
 ```csharp
       _metadataService.GetTypesAsync(query:"QueryString", skip:0, count:100);
 ```
@@ -161,7 +161,7 @@ For more information on SdsStreamViews properties, see [Stream Views](xref:sdsSt
 
 #### Request
 Search for stream views using the REST API and specifying the optional `query` parameter:
- ```text
+ ```json
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/StreamViews?query={query}&skip={skip}&count={count}
  ```
 ##### Parameters
@@ -175,7 +175,7 @@ An optional parameter representing the zero-based offset of the first SdsStreamV
 An optional parameter representing the maximum number of SdsStreamView to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
-``GetStreamViewsAsync`` is an overloaded method that is used to search for and return stream views. 
+``GetStreamViewsAsync`` is used to search for and return stream views. 
 ```csharp
     _metadataService.GetStreamViewsAsync(query:"QueryString", skip:0, count:100);
 ```
@@ -224,7 +224,7 @@ You can qualify the search to a specific field using the ``:`` operator.
 	fieldname:fieldvalue
 
 #### Request
- ```text
+ ```json
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure
  ```
 
@@ -248,7 +248,7 @@ You can use the wildcard operator (``*``) to complement an incomplete string. It
 ``*``<br>``*log``<br>``l*g``<br>``log*``<br>``*log*`` <br>``"my log"*``	| ``*l*g*``<br>``*l*g``<br>``l*g*`` <br>``"my"*"log"``
 
 #### Request
- ```text
+ ```json
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=log*
  ```
 
@@ -273,7 +273,7 @@ Note that while wildcard (``*``) can be used either in or outside of quotes, it 
 ``"pump*pressure"`` | pump\*pressure | pump pressure <br> the pump pressure gauge
 
 #### Request
-```text	
+```json	
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query="pump pressure"	
 ```	
 
@@ -306,7 +306,7 @@ Metadata key is not searched if the operator (``:``) is missing in the query str
 ``a*``  | stream1, stream2, stream3       | Searches the metada values and returns all three streams.
 
 #### Request
- ```text
+ ```json
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=manufacturer:company
  ```
 
@@ -327,7 +327,7 @@ Wildcard (``*``) character can be used both in metada keys and values with one c
 ``Id*:stream*``  | nothing | Wildcard in the field limits the search to metadata. Returns nothing because there is no metadata by that meets the criteria.
 
 #### Request
- ```text
+ ```json
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=manufa*turer:compan*
  ```
 
