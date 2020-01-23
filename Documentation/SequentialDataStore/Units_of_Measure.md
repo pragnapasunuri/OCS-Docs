@@ -288,17 +288,17 @@ A list of the supported units of measure is below. Supported units of measure ar
 | delta degree Celsius                             | delta °C     | Temperature (Delta)                         | 1                 | 0                 |
 
 # SdsUomQuantity API
-The REST APIs provide programmatic access to read and write SDS data. The APIs in this section interact with SdsUomQuantitys. When working in .NET, convenient SDS Client Libraries are available. The ``ISdsMetadataService`` interface, accessed using the ``SdsService.GetMetadataService( )`` helper, defines the available functions. See [Units of Measure](#units-of-measure) for general [SdsUomQuantity](#sdsuomquantity) information.
+The REST APIs provide programmatic access to read and write SDS data. The APIs in this section interact with SdsUomQuantitys. When working in .NET, convenient SDS client libraries methods are available. The ``ISdsMetadataService`` interface, accessed using the ``SdsService.GetMetadataService( )`` helper, defines the available functions. See [Units of Measure](#units-of-measure) for general [SdsUomQuantity](#sdsuomquantity) information.
 ***
 ## `Get Quantity`
 Returns the quantity corresponding to the specified quantityId within a given namespace.
 
-**Request**
+####Request####
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Quantities/{quantityId}
 ```
 
-**Parameters**
+#####Parameters#####
 
 `string tenantId`  
 The tenant identifier  
@@ -309,13 +309,13 @@ The namespace identifier
 `string quantityId`  
 The quantity identifier
 
-**Response**  
+####Response####  
 The response includes a status code and a response body.
 
-**Response body**  
+####Response body####  
 The requested SdsUomQuantity.
 
-Example response body for quantityId = "Length":
+#####Example response body for `QuantityId = "Length"`#####
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -343,7 +343,7 @@ Content-Type: application/json
 }
 ```
 
-**.NET Library**
+####.NET client libraries method####
 ```csharp
    Task<SdsUomQuantity> GetQuantityAsync(string quantityId);
 ```
@@ -354,11 +354,11 @@ Content-Type: application/json
 
 Returns a list of all quantities available within a given namespace.
 
-**Request**
+####Request####
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Quantities?skip={skip}&count={count}
  ```
-
+#####Parameters#####
 `string tenantId`  
 The tenant identifier  
 
@@ -371,13 +371,13 @@ An optional parameter representing the zero-based offset of the first SdsUomQuan
 `int count`  
 An optional parameter representing the maximum number of SdsUomQuantity to retrieve. If not specified, a default value of 100 is used.
 
-**Response**  
+####Response####   
 The response includes a status code and a response body.
 
-**Response body**  
+####Response body####   
 A list of SdsUomQuantity objects
 
-Example response body:
+#####Example response body#####
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -428,7 +428,7 @@ Content-Type: application/json
     ...
 ]
 ```
-**.NET Library**
+####.NET client libraries method####
 ```csharp
     Task<IEnumerable<SdsUomQuantity>> GetQuantitiesAsync(int skip = 0, int count = 100);
 ```
@@ -438,11 +438,11 @@ Content-Type: application/json
 
 Returns the unit of measure associated with the specified uomId belonging to the quantity with the specified quantityId.
 
-**Request**
+####Request####
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Quantities/{quantityId}/Units/{uomId}
  ```
-
+#####Parameters#####
 `string tenantId`  
 The tenant identifier  
 
@@ -455,13 +455,13 @@ The quantity identifier
 `string uomId`  
 The unit of measure identifier
 
-**Response**  
+####Response####  
 The response includes a status code and a response body.
 
-**Response body**  
+####Response body####  
 The requested SdsUom
 
-Example response for quantityId = "Length" and uomId ="mile":
+#####Example response body for `QuantityId = "Length"` and `uomId ="mile"`#####
 ```json
 HTTP/1.1 200
 Content-Type: application/json
