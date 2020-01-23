@@ -24,7 +24,7 @@ A ``GetStreamsAsync`` call with different queries will return below:
 ``humidity*``    | nothing
 
 #### Requests
- ```json
+ ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=name
 
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure&orderby=id asc
@@ -86,7 +86,7 @@ For more information on SdsStreams properties, see [Streams](xref:sdsStreams#str
 
 #### Request
 Search for streams using the REST API and specifying the optional `query` parameter:
- ```json
+ ```text
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query={query}&skip={skip}&count={count}
  ```
 ##### Parameters
@@ -126,7 +126,7 @@ For more information on SdsType properties, see [Types](xref:sdsTypes#typeproper
 
 #### Request
 Search for types using the REST API and specifying the optional `query` parameter:
- ```json
+ ```text
       GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Types?query={query}&skip={skip}&count={count}
  ```
 ##### Parameters
@@ -161,7 +161,7 @@ For more information on SdsStreamViews properties, see [Stream Views](xref:sdsSt
 
 #### Request
 Search for stream views using the REST API and specifying the optional `query` parameter:
- ```json
+ ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/StreamViews?query={query}&skip={skip}&count={count}
  ```
 ##### Parameters
@@ -224,7 +224,7 @@ You can qualify the search to a specific field using the ``:`` operator.
 	fieldname:fieldvalue
 
 #### Request
- ```json
+ ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=name:pump name:pressure
  ```
 
@@ -248,7 +248,7 @@ You can use the wildcard operator (``*``) to complement an incomplete string. It
 ``*``<br>``*log``<br>``l*g``<br>``log*``<br>``*log*`` <br>``"my log"*``	| ``*l*g*``<br>``*l*g``<br>``l*g*`` <br>``"my"*"log"``
 
 #### Request
- ```json
+ ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=log*
  ```
 
@@ -273,7 +273,7 @@ Note that while wildcard (``*``) can be used either in or outside of quotes, it 
 ``"pump*pressure"`` | pump\*pressure | pump pressure <br> the pump pressure gauge
 
 #### Request
-```json	
+```text	
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query="pump pressure"	
 ```	
 
@@ -306,7 +306,7 @@ Metadata key is not searched if the operator (``:``) is missing in the query str
 ``a*``  | stream1, stream2, stream3       | Searches the metada values and returns all three streams.
 
 #### Request
- ```json
+ ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=manufacturer:company
  ```
 
@@ -327,7 +327,7 @@ Wildcard (``*``) character can be used both in metada keys and values with one c
 ``Id*:stream*``  | nothing | Wildcard in the field limits the search to metadata. Returns nothing because there is no metadata by that meets the criteria.
 
 #### Request
- ```json
+ ```text
 	GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams?query=manufa*turer:compan*
  ```
 
