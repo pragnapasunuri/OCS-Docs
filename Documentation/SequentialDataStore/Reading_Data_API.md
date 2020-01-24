@@ -90,12 +90,12 @@ All times are represented at offset 0, GMT.
 
 Returns the first value in the stream. If no values exist in the stream, null is returned.
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data/First
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -105,10 +105,10 @@ The namespace identifier
 ``string streamId``  
 The stream identifier
 
-**Response**  
+#### Response
 The response includes a status code and a response body containing a serialized event.
 
-**.NET Library**
+#### .NET client libraries method
 ```csharp
    Task<T> GetFirstValueAsync<T>(string streamId, string streamViewId = null);
 ```
@@ -118,7 +118,7 @@ The response includes a status code and a response body containing a serialized 
 
 Returns the last value in the stream. If no values exist in the stream, null is returned.
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data/Last
  ```
@@ -134,10 +134,10 @@ The namespace identifier
 ``string streamId``  
 The stream identifier
 
-**Response**  
+#### Response
 The response includes a status code and a response body containing a serialized event.
 
-**.NET Library**
+#### .NET client libraries method
 ```csharp
    Task<T> GetLastValueAsync<T>(string streamId, string streamViewId = null);
 ```
@@ -147,13 +147,13 @@ The response includes a status code and a response body containing a serialized 
 
 Returns a stored event based on the specified `index` and `searchMode`. 
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data
 		?index={index}&searchMode={searchMode}
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -169,12 +169,12 @@ The index
 ``string searchMode``  
 The [SdsSearchMode](xref:sdsReadingData#sdssearchmode), the default is ``exact``
 
-**Response**  
+#### Response
 The response includes a status code and a response body containing a serialized collection with one event. 
 
 Depending on the request `index` and `searchMode`, it is possible to have an empty collection returned.
 
-**Example**  
+##### Example 
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data
 		?index=2017-11-23T13:00:00Z&searchMode=Next
@@ -183,7 +183,7 @@ Depending on the request `index` and `searchMode`, it is possible to have an emp
 The request has an index that matches the index of an existing event, but since a `SdsSearchMode` of ``next`` was specified, the response contains the next event in the stream after the 
 specified index:
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -197,7 +197,7 @@ Content-Type: application/json
 ]
 ```
 
-**Example**  
+##### Example 
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data 
         ?index=2017-11-23T13:30:00Z&searchMode=Next
@@ -205,7 +205,7 @@ Content-Type: application/json
 
 The request specifies an index that does not match an index of an existing event. The next event in the stream is retrieved.
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -218,7 +218,7 @@ Content-Type: application/json
     }
 ]
 ```
-**.NET Library**
+#### .NET client libraries method
 ```csharp
    Task<T> FindDistinctValueAsync<T>(string streamId, string index, 
       SdsSearchMode searchMode = SdsSearchMode.Exact, string streamViewId = null);
@@ -243,13 +243,13 @@ SDS supports three ways of specifying which stored events to return:
 
 Returns a collection of stored values as determined by a `filter`. The `filter` limits results by applying an expression against event fields. Filter expressions are explained in detail in the [Filter expressions](xref:sdsFilterExpressions) section.
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data 
 		?filter={filter}
  ```
 
-**Parameters**   
+##### Parameters 
 ``string tenantId``  
 The tenant identifier
 
@@ -262,10 +262,10 @@ The stream identifier
 ``string filter``  
 The filter expression (see [Filter expressions](xref:sdsFilterExpressions))
 
-**Response**  
+#### Response
 The response includes a status code and a response body containing a serialized collection of events.
 
-**Example**  
+##### Example 
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data 
 		?filter=Measurement gt 10
@@ -273,7 +273,7 @@ The response includes a status code and a response body containing a serialized 
 
 The events in the stream with `Measurement` greater than 10 are returned.
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -296,7 +296,7 @@ Content-Type: application/json
 
 Note that `State` is not included in the JSON as its value is the default value.
 
-**.NET Library**
+#### .NET client libraries method
 ```csharp
    Task<IEnumerable<T>> GetFilteredValuesAsync<T>(string streamId, string filter, 
       string streamViewId = null);
@@ -307,14 +307,14 @@ Note that `State` is not included in the JSON as its value is the default value.
 
 Returns a collection of stored values as determined by a ``startIndex`` and ``count``. Additional optional parameters specify the direction of the range, how to handle events near or at the start index, whether to skip a certain number of events at the start of the range, and how to filter the data.
 
-**Request**
+#### Request
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data
 		?startIndex={startIndex}&count={count}[&skip={skip}&reversed={reversed} 
         &boundaryType={boundaryType}&filter={filter}]
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -344,10 +344,10 @@ Optional SdsBoundaryType specifies the handling of events at or near startIndex
 ``string filter``  
 Optional filter expression
 
-**Response**  
+#### Response
 The response includes a status code and a response body containing a serialized collection of events.
 
-**Example**  
+##### Example 
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data 
         ?startIndex=2017-11-23T13:00:00Z&count=100
@@ -355,7 +355,7 @@ The response includes a status code and a response body containing a serialized 
 
 This request will return a response with up to 100 events starting at 13:00 and extending forward toward the end of the stream: 
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -382,7 +382,7 @@ Content-Type: application/json
 
 Note that `State` is not included in the JSON as its value is the default value.
 
-**Example**   
+##### Example  
 To reverse the direction of the request, set reversed to true. The following request will 
 return up to 100 events starting at 13:00 and extending back toward the start of the stream:
  ```text
@@ -390,7 +390,7 @@ return up to 100 events starting at 13:00 and extending back toward the start of
 		?startIndex=2017-11-23T13:00:00Z&count=100&reversed=true
  ```
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -421,7 +421,7 @@ it would mean one event before the specified start index.
         &boundaryType=2
  ```
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -455,7 +455,7 @@ Adding a filter to the request means only events that meet the filter criteria a
         &boundaryType=2&filter=Measurement gt 10
  ```
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -469,7 +469,7 @@ Content-Type: application/json
 ]
 ```
 
-**.NET Library**
+#### .NET client libraries methods
 ```csharp
    Task<IEnumerable<T>> GetRangeValuesAsync<T>(string streamId, string startIndex, 
       int count, string streamViewId = null);
@@ -525,7 +525,7 @@ Paging is supported for window requests with a large number of events.
 To retrieve the next page of values, include the `continuationToken` from the results of the previous request. 
 For the first request, specify a null or empty string for the `continuationToken`.
 
-**Requests**
+#### Requests
  ```text
      GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data 
           ?startIndex={startIndex}&endIndex={endIndex}
@@ -547,7 +547,7 @@ For the first request, specify a null or empty string for the `continuationToken
           &continuationToken={continuationToken}
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -581,12 +581,12 @@ Optional [filter expression](xref:sdsFilterExpressions)
 ``string continuationToken``  
 Optional token used to retrieve the next page of data. If `count` is specified, a `continuationToken` must also be specified.
 
-**Response**  
+#### Response 
 The response includes a status code and a response body containing a serialized collection of events. 
 
 A continuation token can be returned if specified in the request.
 
-**Example**  
+##### Example 
 The following requests all stored events between 12:30 and 15:30: 
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data 
@@ -595,7 +595,7 @@ The following requests all stored events between 12:30 and 15:30:
 
 The response will contain the event stored at the specified index:
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -618,7 +618,7 @@ Content-Type: application/json
 
 Note that `State` is not included in the JSON as its value is the default value.
 
-**Example**   
+##### Example  
 When the request is modified to specify a boundary type of Outside, the value 
 before 13:30 and the value after 15:30 are included:
  ```text
@@ -627,7 +627,7 @@ before 13:30 and the value after 15:30 are included:
         &boundaryType=2
  ```
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -660,6 +660,7 @@ Note that `State` is not included in the JSON as its value is the default value.
 Further, `Measurement` is not included in the second, 12:00:00, event as zero is the default 
 value for numbers.
 
+##### Example 
 If instead a start boundary of Inside, only values inside the start boundary (after 13:30) 
 are included in the result. With an end boundary of Outside one value outside the end index 
 (after 15:30) is included:
@@ -669,7 +670,7 @@ are included in the result. With an end boundary of Outside one value outside th
         &endIndex=2017-11-23T15:30:00Z&endBoundaryType=2
  ```
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -698,6 +699,7 @@ Content-Type: application/json
 ]
 ```
 
+##### Example 
 In order to page the results of the request, a continuation token may be specified. 
 This requests the first page of the first two stored events between start index and 
 end index by indicating count is 2 and continuationToken is an empty string:
@@ -707,7 +709,7 @@ end index by indicating count is 2 and continuationToken is an empty string:
         &count=2&continuationToken=
  ```
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -729,6 +731,7 @@ Content-Type: application/json
 }
 ```
 
+##### Example 
 This request uses the continuation token from the previous 
 page to request the next page of stored events:
  ```text
@@ -737,7 +740,7 @@ page to request the next page of stored events:
         &count=2&continuationToken=2017-11-23T14:00:00Z
  ```
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -756,7 +759,7 @@ Content-Type: application/json
 
 In this case, the results contain the final event. The returned continuation token is null. 
 
-**.NET Library**
+#### .NET client libraries methods
 ```csharp
    Task<IEnumerable<T>> GetWindowValuesAsync<T>(string streamId, string startIndex, 
       string endIndex, string streamViewId = null);
@@ -859,13 +862,13 @@ SDS supports two ways of specifying which interpolated events to return:
 
 Returns events at the specified indexes. If no stored event exists at a specified index, the stream's read characteristics determine how the returned event is calculated.
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data/
         Interpolated?index={index}[&index={index}...]
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -878,12 +881,12 @@ The stream identifier
 ``string index``  
 One or more indexes
 
-**Response**  
+#### Response  
 The response includes a status code and a response body containing a serialized collection of events.
 
 Depending on the specified indexes and read characteristics of the stream, it is possible to have less events returned than specified indexes. An empty collection can also be returned.
 
-**Example**  
+##### Example 
 Consider a stream of type ``Simple`` with the default ``InterpolationMode`` of ``Continuous`` and 
 ``ExtrapolationMode`` of ``All``. In the following request, the specified index matches an existing stored event:
  ```text
@@ -893,7 +896,7 @@ Consider a stream of type ``Simple`` with the default ``InterpolationMode`` of `
 
 The response will contain the event stored at the specified index.
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -906,7 +909,7 @@ Content-Type: application/json
     }
 ]
 ```
-
+##### Example 
 The following request specifies an index for which no stored event exists:
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data/
@@ -916,7 +919,7 @@ The following request specifies an index for which no stored event exists:
 Because the index is a valid type for interpolation and the stream has a ``InterpolationMode`` of ``Continuous``, 
 this request receives a response with an event interpolated at the specified index:
 
-**Response body**
+##### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -929,7 +932,7 @@ Content-Type: application/json
     }
 ]
 ```
-
+##### Example 
 Consider a stream of type ``Simple`` with an ``InterpolationMode`` of ``Discrete`` and 
 ``ExtrapolationMode`` of ``All``. In the following request, the specified indexes only 
 match two existing stored events:
@@ -940,7 +943,7 @@ match two existing stored events:
 
 For this request, the response contains events for two of the three specified indexes.
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -959,7 +962,7 @@ Content-Type: application/json
 ]
 ```
 
-**.NET Library**
+#### .NET client libraries methods
 ```csharp
    Task<T> GetValueAsync<T>(string streamId, string index, 
       string streamViewId = null);
@@ -981,13 +984,13 @@ Content-Type: application/json
 
 Returns events at evenly spaced intervals based on the specified start index, end index, and count. If no stored event exists at an index interval, the stream's read characteristics determine how the returned event is calculated.
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data/
         Interpolated?startIndex={startIndex}&endIndex={endIndex}&count={count}
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -1006,9 +1009,10 @@ The index defining the end of the window
 ``int count``  
 The number of events to return. Read characteristics of the stream determine how the events are constructed.
 
-**Response**  
+#### Response  
 The response includes a status code and a response body containing a serialized collection of events. Depending on the read characteristics and input parameters, it is possible for a collection to be returned with less events than specified in the count.
 
+##### Example 
 For a stream, named Simple, of type ``Simple`` for the following request:
  ```text
     GET api/v1/Tenants/{tenantId}}/Namespaces/{namespaceId}/Streams/Simple/Data/
@@ -1017,7 +1021,7 @@ For a stream, named Simple, of type ``Simple`` for the following request:
 
 the start and end fall exactly on event indexes, and the number of events from start to end match the count of three (3).
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -1041,7 +1045,7 @@ Content-Type: application/json
 ]
 ```
 
-**.NET Library**
+#### .NET client libraries methods
 ```csharp
    Task<IEnumerable<T>> GetValuesAsync<T>(string streamId, string startIndex, 
       string endIndex, int count, string streamViewId = null);
@@ -1121,13 +1125,13 @@ Currently, these values can only be calculated for properties of the following t
 **Note:** Properties marked with an ``InterpolationMode`` of ``Discrete`` do not support summaries.
 Unsupported properties will be excluded from the summaries returned.
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data/
         Summaries?startIndex={startIndex}&endIndex={endIndex}&count={count}[&filter={filter}]
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -1149,7 +1153,7 @@ The number of intervals requested
 ``string filter``  
 Optional filter expression
   
-**Response**  
+#### Response
 The response includes a status code and a response body containing a serialized collection of SdsIntervals.
 
 Each SdsInterval has a start, end, and collection of summary values.
@@ -1160,14 +1164,15 @@ Each SdsInterval has a start, end, and collection of summary values.
 | End       | The end of the interval                           |
 | Summaries | The summary values for the interval, keyed by summary type. The nested dictionary contains property name keys and summary calculation result values. |
 
-**Example**  
+##### Example 
 The following request calculates two summary intervals between the `startIndex` and `endIndex`: 
+
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data/ 
         Summaries?startIndex=2017-11-23T12:00:00Z&endIndex=2017-11-23T16:00:00Z&count=2
  ```
  
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -1286,7 +1291,7 @@ Content-Type: application/json
 
 SDS also supports summary requests for nullable SdsTypes. It means an SdsType has at least a nullable SdsTypeProperty.
 
-**Example**
+##### Example 
 
 The following example contains a nullable double property with interpolation mode set to continuous:
 
@@ -1346,7 +1351,7 @@ The following request calculates one summary interval between the `startIndex` a
         Summaries?startIndex=2017-11-23T12:00:01Z&endIndex=2017-11-23T12:00:08Z&count=1
  ```                
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -1407,7 +1412,7 @@ Content-Type: application/json
 ]
 ```
 
-**.NET Library**
+#### .NET client libraries methods
 ```csharp
    Task<IEnumerable<SdsInterval<T>>> GetIntervalsAsync<T>(string streamId, string 
       startIndex, string endIndex, int count, string streamViewId = null);
@@ -1432,7 +1437,7 @@ Returns representative data sampled by intervals between a specified start and e
 Sampling is driven by a specified property or properties of the stream's Sds Type. Property types that cannot be interpolated do not support sampling requests. Strings are an example of a property that cannot be interpolated. For more 
 information see [Interpolation](xref:sdsReadingData#interpolation). 
 
-**Request**  
+#### Request  
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/{streamId}/Data/
         Sampled?startIndex={startIndex}&endIndex={endIndex}&intervals={intervals}&sampleBy={sampleBy}
@@ -1440,7 +1445,7 @@ information see [Interpolation](xref:sdsReadingData#interpolation).
         &endBoundaryType={endBoundaryType}&filter={filter}]
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
 
@@ -1474,17 +1479,17 @@ Optional SdsBoundaryType specifies the handling of events at or near the endInde
 ``string filter``  
 Optional filter expression
 
-**Response**  
+#### Response
 The response includes a status code and a response body containing a serialized collection of events.
 
-**Example**  
+##### Example 
 The following request returns two sample intervals between the `startIndex` and `endIndex`: 
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Streams/Simple/Data/
         Sampled?startIndex=2019-01-01T00:00:00Z&endIndex=2019-01-02T00:00:00Z&intervals=2&sampleBy=Measurement
  ```
  
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -1531,7 +1536,7 @@ Content-Type: application/json
 ```
 Note that `State` is not included in the JSON when its value is the default value.
 
-**.NET Library**
+#### .NET client libraries methods
 ```csharp
    Task<IEnumerable<T>> GetSampledValuesAsync<T>(string streamId, string startIndex, string endIndex,
       int intervals, IEnumerable<string> sampleBy, string streamViewId = null);  
@@ -1585,7 +1590,7 @@ SDS supports two types of join requests:
         &endBoundaryType={endBoundaryType}&filter={filter}&count={count}]
  ```
 
-**Parameters**  
+##### Parameters
 ``string tenantId``  
 The tenant identifier
   
@@ -1619,12 +1624,12 @@ Optional SdsBoundaryType specifies the handling of events at or near the endInde
 ``string filter``  
 Optional filter expression
 
-**Response**  
+#### Response
 The response includes a status code and a response body containing multiple serialized events. See examples for specifics.
 
-#### Examples
+##### Examples
 
-To join multiple streams, for example Simple1 and Simple2, assume that Simple1 presents the following data:
+To join multiple streams, for example `Simple1` and `Simple2`, assume that `Simple1` presents the following data:
 
 ```json  
 HTTP/1.1 200
@@ -1654,7 +1659,7 @@ Content-Type: application/json
 ]
 ```
 
-And assume that Simple2 presents the following data:
+And assume that `Simple2` presents the following data:
 
 ```json
 HTTP/1.1 200
@@ -1693,10 +1698,10 @@ The following are responses for various Joins request options:
         &startIndex=0001-01-01T00:00:00.0000000&endIndex=9999-12-31T23:59:59.9999999
  ```
 
-**Response**  
+#### Response
 Measurements from both streams with common indexes.
 
-**Response body** 
+##### Example response body 
 
 ```json
 HTTP/1.1 200
@@ -1725,10 +1730,10 @@ Content-Type: application/json
         &startIndex=0001-01-01T00:00:00.0000000&endIndex=9999-12-31T23:59:59.9999999
  ```
 
-**Response**  
+#### Response
 All Measurements from both Streams, with default values at indexes where a Stream does not have a value.
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -1804,12 +1809,12 @@ Content-Type: application/json
         &startIndex=0001-01-01T00:00:00.0000000&endIndex=9999-12-31T23:59:59.9999999
  ```
 
-**Response**  
+#### Response
 All Measurements from both Streams with missing values interpolated. If the missing values are between valid Measurements within a Stream, they are interpolated. If the missing values are outside of the boundary values, they are extrapolated.
 
 **Note:** The Interpolated SdsJoinMode currently does not support SdsInterpolationModes of the streams. All join requests with interpolations will honor the interpolation mode of the stream type or type property. For more information, see [Interpolation](xref:sdsReadingData#interpolation).
 
-**Response body**
+##### Example response body
 
 ```json
 HTTP/1.1 200
@@ -1910,10 +1915,10 @@ Content-Type: application/json
         &startIndex=0001-01-01T00:00:00.0000000&endIndex=9999-12-31T23:59:59.9999999
  ```
 
-**Response**  
+#### Response
 This is similar to [OuterJoin](#outer-join-example), but value at each index is the first available value at that index when iterating the given list of streams from left to right.
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -1964,10 +1969,10 @@ Content-Type: application/json
         &startIndex=0001-01-01T00:00:00.0000000&endIndex=9999-12-31T23:59:59.9999999
  ```
 
-**Response**  
+#### Response
 This is similar to [OuterJoin](#outer-join-example), but value at each index is the first available value at that index when iterating the given list of streams from right to left.
 
-**Response body**
+##### Example response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -2013,13 +2018,13 @@ Content-Type: application/json
 
 
 <a name="postjoin"></a>
-### POST Request
+### `POST Request`
  ```text
     POST api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Bulk/Streams/Data/Joins?
         joinMode={joinMode}
  ```
 
-**Parameters**
+##### Parameters
 
 ``string tenantId``  
 The tenant identifier
@@ -2033,7 +2038,7 @@ Type of join, i.e. inner, outer, etc.
 **Request Body**  
 Read options specific to each stream.
 
-**Response**  
+#### Response
  The response includes a status code and a response body containing multiple serialized events.
 
 Consider the following outer join request,
@@ -2075,7 +2080,7 @@ where in the request body, different start indexes and end indexes are specified
 
 Only events within the stream's specified index boundaries are considered for the outer join operation
 
-**Response body**
+#### Response body
 ```json
 HTTP/1.1 200
 Content-Type: application/json
@@ -2126,7 +2131,7 @@ Content-Type: application/json
 
 Notice that not all the values from Streams were included since they are restricted by individual queries for each Stream.
 
-**.NET Library**
+#### .NET client libraries methods
 ```csharp
    Task<IEnumerable<IList<T>>> GetJoinValuesAsync<T>(IEnumerable<string> streams, 
       SdsJoinType joinMode, string startIndex, string endIndex);
