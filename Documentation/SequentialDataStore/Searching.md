@@ -239,7 +239,7 @@ Operator | Description
 ``OR``  | OR operator. ``cat OR dog`` searches for either "cat" or "dog", or both. 
 ``NOT`` | NOT operator. ``cat NOT dog`` searches for "cat" or those without "dog".
 ``*``   | Wildcard operator. Matches 0 or more characters. ``log*`` searches for those starting with "log" ("log", "logs" or "logger" for example.); ignores case.
-``:``   | Field-scoped query. Specifies a field to search. ``id:stream*`` searches for streams whose ``id`` field starts with "stream", but will not search other fields like ``name`` or ``description``. See [Field-scoping operator] (#fieldScoped) below.
+``:``   | Field-scoped query. Specifies a field to search. ``id:stream*`` searches for streams whose ``id`` field starts with "stream", but will not search other fields like ``name`` or ``description``. See [Field-scoping operator](#fieldScoped) below.
 ``" "`` | Quote operator. Scopes the search to an exact sequence of characters. While ``dog food`` (without quotes) searches for instances with "dog" or "food" anywhere in any order, ``"dog food"`` (with quotes) will only match instances that contain the whole string together and in that order.
 ``( )`` | Precedence operator. ``motel AND (wifi OR luxury)`` searches for either "wifi" or "luxury", or "wifi" and "luxury" at the intersection of "motel".
 
@@ -250,7 +250,7 @@ Operator | Description
 ``mud OR log`` | log mud<br>mud<br>log | 
 ``mud AND (NOT log)`` | mud | mud log
 ``mud AND (log OR pump*)`` | mud log<br>mud pumps | mud bath
-``name:stream* AND (description:pressure OR description:pump)`` | The name starts with "stream" and the description has the either "pressure" or "pump", or both. | 
+``name:stream* AND (description:pressure OR description:pump)`` | The name starts with "stream" and the description has either "pressure" or "pump", or both. | 
 
 ### <a name="fieldScoped">Field-scoping (``:``) operator</a>
 You can qualify the search to a specific field using the ``:`` operator.  
