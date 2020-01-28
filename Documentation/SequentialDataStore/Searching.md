@@ -100,7 +100,7 @@ An optional parameter representing the zero-based offset of the first SdsStream 
 An optional parameter representing the maximum number of SdsStreams to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
-``GetStreamsAsync`` is used to search for and return streams. When called, the software determines the most appropriate method to use by comparing the argument types specified in the call to the method definition.
+``GetStreamsAsync`` is used to search for and return streams. 
 ```csharp
       _metadataService.GetStreamsAsync(query:"QueryString", skip:0, count:100);
 ```
