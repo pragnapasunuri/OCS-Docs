@@ -62,7 +62,7 @@ If ``skip`` is set to 100, the following call will return the remaining 75 match
 
 Streams search is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
 
-For more information on SdsStreams properties, see [Streams](xref:sdsStreams#streampropertiestable).
+For more information on stream properties, see [Streams](xref:sdsStreams#streampropertiestable).
 
 **Searcheable Properties**
 | Property          | Searchable  |
@@ -112,7 +112,7 @@ The Stream fields valid for search are identified in the fields table located on
 
 Types search is exposed through the REST API and the client libraries method ``GetTypesAsync``. 
 
-For more information on SdsType properties, see [Types](xref:sdsTypes#typepropertiestable).
+For more information on type properties, see [Types](xref:sdsTypes#typepropertiestable).
 
 **Searcheable Properties**
 | Property          | Searchable |
@@ -149,7 +149,7 @@ An optional parameter representing the maximum number of SdsTypes to retrieve. I
 ## Search for stream views
 
 Stream views search is exposed through the REST API and the client libraries method ``GetStreamViewsAsync``. 
-For more information on SdsStreamViews properties, see [Stream Views](xref:sdsStreamViews#streamviewpropertiestable).
+For more information on stream view properties, see [Stream Views](xref:sdsStreamViews#streamviewpropertiestable).
 
 **Searcheable Properties**
 | Property     | Searchable |
