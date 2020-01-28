@@ -59,6 +59,7 @@ If ``skip`` is set to 100, the following call will return the remaining 75 match
 ```
 
 ## Search for streams
+
 Streams search is exposed through the REST API and the client libraries method ``GetStreamsAsync``.
 
 For more information on SdsStreams properties, see [Streams](xref:sdsStreams#streampropertiestable).
@@ -108,6 +109,7 @@ An optional parameter representing the maximum number of SdsStreams to retrieve.
 The Stream fields valid for search are identified in the fields table located on the [Streams](xref:sdsStreams) page. Note that Stream Metadata has unique syntax rules, see [How Searching Works: Stream Metadata](#Stream_Metadata_search_topic).
 
 ## Search for types
+
 Types search is exposed through the REST API and the client libraries method ``GetTypesAsync``. 
 
 For more information on SdsType properties, see [Types](xref:sdsTypes#typepropertiestable).
@@ -145,7 +147,8 @@ An optional parameter representing the maximum number of SdsTypes to retrieve. I
       _metadataService.GetTypesAsync(query:"QueryString", skip:0, count:100);
 ```
 ## Search for stream views
-Stream views search is exposed through the REST API and the client libraries methodd ``GetStreamViewsAsync``. 
+
+Stream views search is exposed through the REST API and the client libraries method ``GetStreamViewsAsync``. 
 For more information on SdsStreamViews properties, see [Stream Views](xref:sdsStreamViews#streamviewpropertiestable).
 
 **Searcheable Properties**
@@ -157,7 +160,8 @@ For more information on SdsStreamViews properties, see [Stream Views](xref:sdsSt
 | SourceTypeId | Yes		|
 | TargetTypeId | Yes		|
 | Properties   | Yes, with limitations* |
-**\*Notes on Properties field:** SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties. See example below.  
+**\*Notes on Properties field:** SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object in a search. This includes nested SdsStreamViewProperties. See example below.  
+
 ##### Example
 You can search for ``ComplexView`` using the `Id`("NestedView"), `SourceTypeId`, and `TargetTypeId` of ``NestedView`` but not its `Description`("An example of a nested view").  
 ```text
