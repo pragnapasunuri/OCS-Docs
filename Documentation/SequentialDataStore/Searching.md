@@ -165,31 +165,31 @@ For more information on stream view properties, see [Stream Views](xref:sdsStrea
 ##### Example
 You can search for ``ComplexView`` using the `Id`("NestedView"), `SourceTypeId`, and `TargetTypeId` of ``NestedView`` but not its `Description`("An example of a nested view").  
 ```json
-                {
-                                "Id": "ComplexView",
-                                "Name": "ComplexView",
-                                "SourceTypeId": "ComplexSourceType",
-                                "TargetTypeId": "ComplexTargetType",
-                                "Description": null,
-                                "Properties": [
-                                                {
-                                                                "SourceId": "Value",
-                                                                "TargetId": "Value",
-                                                                "SdsStreamView": {
-"Id": "NestedView"
-                                                                                "SourceTypeId": "NestedType",
-                                                                                "TargetTypeId": "NestedType",
-                                                                                "Description": "An example of a nested view",
-                                                                                "Properties": [
-                                                                                                {
-                                                                                                                "SourceId": "Value",
-                                                                                                                "TargetId": "Value"
-                                                                                                }
-                                                                                ]
-                                                                }
-                                                }
-                                ]
-                }
+{
+    "Id": "ComplexView",
+    "Name": "ComplexView",
+    "SourceTypeId": "ComplexSourceType",
+    "TargetTypeId": "ComplexTargetType",
+    "Description": null,
+    "Properties":   [
+                        {
+                            "SourceId": "Value",
+                            "TargetId": "Value",
+                            "SdsStreamView": {
+                                                "Id": "NestedView"
+                                                "SourceTypeId": "NestedType",
+                                                "TargetTypeId": "NestedType",
+                                                "Description": "An example of a nested view",
+                                                "Properties": [
+                                                                   {
+                                                                        "SourceId": "Value",
+                                                                        "TargetId": "Value"
+                                                                   }
+                                                              ]
+                                            }
+                       }
+                    ]
+}
 
 
 ```
@@ -200,13 +200,13 @@ Search for stream views using the REST API and specifying the optional `query` p
  ```
 ##### Parameters
 `string query`  
-An optional parameter representing the search criteria for stream views. If unspecified, returns all values. Can be used with `skip`, `count` and `orderby`. 
+An optional parameter representing the search criteria. If unspecified, returns all values. Can be used with `skip`, `count` and `orderby`. 
 
 `int skip`  
 An optional parameter representing the zero-based offset of the first SdsStreamView to retrieve.If unspecified, a default value of 0 is used. Use when more items match the search criteria than can be returned in a single call.
 
 `int count`  
-An optional parameter representing the maximum number of SdsStreamView to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
+An optional parameter representing the maximum number of SdsStreamViews to retrieve. If unspecified, a default value of 100 is used. The maximum value is 1,000. 
 
 #### .NET client libraries method
 ``GetStreamViewsAsync`` is used to search for and return stream views. 
