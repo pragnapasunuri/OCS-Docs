@@ -164,7 +164,7 @@ For more information on stream view properties, see [Stream Views](xref:sdsStrea
 
 ##### Example
 You can search for ``ComplexView`` using the `Id`("NestedView"), `SourceTypeId`, and `TargetTypeId` of ``NestedView`` but not its `Description`("An example of a nested view").  
-```text
+```json
                 {
                                 "Id": "ComplexView",
                                 "Name": "ComplexView",
