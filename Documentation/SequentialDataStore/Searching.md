@@ -122,7 +122,7 @@ For more information on SdsType properties, see [Types](xref:sdsTypes#typeproper
 | InterpolationMode | No         |
 | ExtrapolationMode | No         |
 | Properties        | Yes, with limitations* |
-**\*Notes on Properties field:** each SdsTypeProperty of a given SdsType has its Name and Id included in the Properties field. This includes nested SdsTypes of the given SdsType. Therefore, the searching of Properties will distinguish SdsTypes by their respective lists of relevant SdsTypeProperty Ids and Names.
+**\*Notes on Properties field:** Name and Id of a type are shown on its Properties field. Similarly, Name and Id of a nested type are included in its Properties. If there are two types with the same Properties, Name or ID, the search will return both types in the result.
 
 #### Request
 Search for types using the REST API and specifying the optional `query` parameter:
