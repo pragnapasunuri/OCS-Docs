@@ -124,7 +124,7 @@ For more information on type properties, see [Types](xref:sdsTypes#typepropertie
 | InterpolationMode | No         |
 | ExtrapolationMode | No         |
 | Properties        | Yes, with limitations* |
-**\*Notes on Properties field:** Name and Id of a type are shown on its Properties field. Similarly, Name and Id of a nested type are included in its Properties. If there are two types with the same Properties, Name or ID, the search will return both types in the result.
+**\*Notes on Properties field:** Name and Id of a type are included in its Properties field. Similarly, Name and Id of a nested type are included in its Properties. If there are two types with the same Properties, Name or ID, the search will return both types in the result.
 
 #### Request
 Search for types using the REST API and specifying the optional `query` parameter:
@@ -225,8 +225,8 @@ If your query has a wildcard (``*``) operator after a punctuation character, nei
 ----------|--------------|-----------
 ``Device.1`` | ``Device.1``| The token includes ``.1`` because there is no space between it and ``Device``.
 ``Device!!1`` | ``Device!!1``| The token includes ``!!1`` because there is no space between it and ``Device``.
-``Device. ``*space*  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term.
-`Device!! `*space* | ``Device``| ``!!`` and the following space demarcates ``Device`` as the token term.
+<code>Device.&nbsp;</code>  | ``Device``| ``.`` and the following space demarcates ``Device`` as the token term.
+<code>Device!!&nbsp;</code> | ``Device``| ``!!`` and the following space demarcates ``Device`` as the token term.
 ``Device!*`` | ``Device``| The token does not include ``!*`` because neither is tokenized if a wildcard operator follows a punctuation character.
 ``"Device!"*`` | ``Device!``| ``Device!`` is the token because the string is enclosed in double quotes.
 
