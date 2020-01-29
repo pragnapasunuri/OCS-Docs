@@ -1724,8 +1724,8 @@ Content-Type: application/json
     ]
 ]
 ```
-
-##### <a name="outer">`Outer Join` example request</a>
+<a name="outer"></a>
+##### `Outer Join` example request
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Bulk/Streams/Data/Joins
         ?streams=Simple1,Simple2&joinMode=outer
