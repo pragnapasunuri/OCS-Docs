@@ -106,7 +106,9 @@ An optional parameter representing the maximum number of SdsStreams to retrieve.
       _metadataService.GetStreamsAsync(query:"QueryString", skip:0, count:100);
 ```
 
-The Stream fields valid for search are identified in the fields table located on the [Streams](xref:sdsStreams) page. Note that Stream Metadata has unique syntax rules, see [How Searching Works: Stream Metadata](#Stream_Metadata_search_topic).
+The Stream fields valid for search are identified in the fields table located on the [Streams](xref:sdsStreams) page.
+Note that Stream Metadata has unique syntax rules.
+See [How Searching Works: Stream Metadata](#Stream_Metadata_search_topic).
 
 ## Search for types
 
@@ -247,10 +249,10 @@ Operator | Description
 **Query string**     | **Matches field value** | **Does not match field value**
 ------------------ | --------------------------------- | -----------------------------
 ``mud AND log`` | log mud<br>mud log | mud<br>log
-``mud OR log`` | log mud<br>mud<br>log | 
+``mud OR log`` | log mud<br>mud<br>log | mutt<br>look
 ``mud AND (NOT log)`` | mud | mud log
 ``mud AND (log OR pump*)`` | mud log<br>mud pumps | mud bath
-``name:stream* AND (description:pressure OR description:pump)`` | The name starts with "stream" and the description has either "pressure" or "pump", or both. | 
+``name:stream* AND (description:pressure OR description:pump)`` | The name starts with "stream" and the description has either "pressure" or "pump", or both. | string
 
 ### <a name="fieldScoped">Field-scoping (``:``) operator</a>
 You can qualify the search to a specific field using the ``:`` operator.  
@@ -268,7 +270,8 @@ You can qualify the search to a specific field using the ``:`` operator.
 ```
 
 ### Wildcard (``*``) operator
-You can use the wildcard operator (``*``) to complement an incomplete string. It can only be used once per token, unless in a 'contains-type' query clause: one at the beginning and another at the end (``*Tank*`` but not ``*Ta*nk``, ``Ta*nk*`` or ``*Ta*nk*``, for example). Token is 
+You can use the wildcard operator (``*``) to complement an incomplete string.
+It can only be used once per token, unless there's one at the beginning and another at the end (``*Tank*`` but not ``*Ta*nk``, ``Ta*nk*`` or ``*Ta*nk*``, for example).  
 
 **Query string**     | **Matches field value** | **Does not match field value**
 ------------------ | --------------------------------- | -----------------------------
@@ -337,7 +340,7 @@ Metadata key is not searched if the operator (``:``) is missing in the query str
 ------------------------   | ------------- |-------------
 ``manufacturer:company``  | stream1 | Searches and returns stream1.
 ``company``               | stream1      | Searches only the metadata values due to lack of ``:`` operator and returns stream1.
-``a*``  | stream1, stream2, stream3       | Searches the metada values and returns all three streams.
+``a*``  | stream1, stream2, stream3       | Searches the metadata values and returns all three streams.
 
 #### Request
  ```text
@@ -350,15 +353,15 @@ Metadata key is not searched if the operator (``:``) is missing in the query str
 ```
 
 ### Wildcard (``*``) Operator  
-Wildcard (``*``) character can be used both in metada keys and values with one caveat: wildcard (``*``) used in the field (left of field-scoped operator (``:``)) will only search within stream metadata.
+Wildcard (``*``) character can be used both in metadata keys and values with one caveat: wildcard (``*``) used in the field (left of field-scoped operator (``:``)) will only search within stream metadata.
 
 **Query string**     | **Returns** | **Description**
 ------------------  | ---------------- | ------------------------
 ``manufa*turer:compan*``  | stream1 | Searches and returns stream1.
-``ser*al:a*``  | stream1, stream2 | Searches and retrns stream1 and stream2.
+``ser*al:a*``  | stream1, stream2 | Searches and returns stream1 and stream2.
 ``s*:a*``  | stream1, stream2, stream3 | Searches and returns all three streams. 
 ``Id:stream*``  |  stream1, stream2, stream3 | Searches all fields and returns three streams. 
-``Id*:stream*``  | nothing | Wildcard in the field limits the search to metadata. Returns nothing because there is no metadata by that meets the criteria.
+``Id*:stream*``  | nothing | Wildcard in the field limits the search to metadata. Returns nothing because there is no metadata by that name that meets the criteria.
 
 #### Request
  ```text
