@@ -1725,7 +1725,7 @@ Content-Type: application/json
 ]
 ```
 
-##### `Outer Join` example request
+##### <a name="outer">`Outer Join` example request</a>
  ```text
     GET api/v1/Tenants/{tenantId}/Namespaces/{namespaceId}/Bulk/Streams/Data/Joins
         ?streams=Simple1,Simple2&joinMode=outer
@@ -1918,7 +1918,7 @@ Content-Type: application/json
  ```
 
 #### Response
-This is similar to [OuterJoin](#outer-join-example), but value at each index is the first available value at that index when iterating the given list of streams from left to right.
+This is similar to [OuterJoin](#outer), but value at each index is the first available value at that index when iterating the given list of streams from left to right.
 
 ##### Example response body
 ```json
@@ -1972,7 +1972,7 @@ Content-Type: application/json
  ```
 
 #### Response
-This is similar to [OuterJoin](#outer-join-example), but value at each index is the first available value at that index when iterating the given list of streams from right to left.
+This is similar to [OuterJoin](#outer), but value at each index is the first available value at that index when iterating the given list of streams from right to left.
 
 ##### Example response body
 ```json
