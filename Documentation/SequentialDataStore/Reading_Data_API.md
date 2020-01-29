@@ -663,7 +663,7 @@ Further, `Measurement` is not included in the second event (12:00:00) as zero is
 value for numbers.
 
 ##### Example request 
-If instead a start boundary of Inside, only values inside the start boundary (after 13:30) 
+With a start boundary of Inside, only values inside the start boundary (after 13:30) 
 are included in the result. With an end boundary of Outside, one value outside the end index 
 (after 15:30) is included:
  ```text
