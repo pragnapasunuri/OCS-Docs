@@ -162,38 +162,36 @@ For more information on stream view properties, see [Stream Views](xref:sdsStrea
 | SourceTypeId | Yes		|
 | TargetTypeId | Yes		|
 | Properties   | Yes, with limitations* |
-**\*Notes on Properties field:** SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object in a search. This includes nested SdsStreamViewProperties. See example below.  
+**\*Notes on Properties field:** The Properties collection contains a list of SdsStreamViewProperty objects. The query will attempt to find a match on the SdsStreamViewProperty's Id, SourceTypeId, and TargetTypeId fields. The Properties collection of nested views will also be searched. See example below.  
 
 ##### Example
 You can search for ``ComplexView`` using the `Id`("NestedView"), `SourceTypeId`, and `TargetTypeId` of ``NestedView`` but not its `Description`("An example of a nested view").  
 ```json
-{
-    "Id": "ComplexView",
-    "Name": "ComplexView",
-    "SourceTypeId": "ComplexSourceType",
-    "TargetTypeId": "ComplexTargetType",
-    "Description": null,
-    "Properties":   [
-                        {
-                            "SourceId": "Value",
-                            "TargetId": "Value",
-                            "SdsStreamView": {
-                                                "Id": "NestedView"
-                                                "SourceTypeId": "NestedType",
-                                                "TargetTypeId": "NestedType",
-                                                "Description": "An example of a nested view",
-                                                "Properties": [
-                                                                   {
-                                                                        "SourceId": "Value",
-                                                                        "TargetId": "Value"
-                                                                   }
-                                                              ]
-                                            }
-                       }
-                    ]
+{ 
+   "Id":"ComplexView",
+   "Name":"ComplexView",
+   "SourceTypeId":"ComplexSourceType",
+   "TargetTypeId":"ComplexTargetType",
+   "Description":null,
+   "Properties":[ 
+      { 
+         "SourceId":"Value",
+         "TargetId":"Value",
+         "SdsStreamView":{ 
+            "Id":"NestedView",
+            "SourceTypeId":"NestedType",
+            "TargetTypeId":"NestedType",
+            "Description":"An example of a nested view",
+            "Properties":[ 
+               { 
+                  "SourceId":"Value",
+                  "TargetId":"Value"
+               }
+            ]
+         }
+      }
+   ]
 }
-
-
 ```
 #### Request
 Search for stream views using the REST API and specifying the optional `query` parameter:
