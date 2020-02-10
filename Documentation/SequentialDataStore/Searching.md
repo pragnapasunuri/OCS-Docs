@@ -252,6 +252,7 @@ Operator | Description
 ``mud AND (log OR pump*)`` | mud log<br>mud pumps | mud bath
 ``name:stream* AND (description:pressure OR description:pump)`` | The name starts with "stream" and the description has either "pressure" or "pump", or both. | string
 
+
 ### <a name="fieldScoped">Field-scoping (``:``) operator</a>
 You can qualify the search to a specific field using the ``:`` operator.  
 
