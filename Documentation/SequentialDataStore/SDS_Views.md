@@ -38,7 +38,7 @@ The following table shows the required and optional SdsStreamView fields. Fields
 **Rules for the Stream View Identifier (SdsStreamView.Id)**
 
 1. Is not case sensitive
-2. Can contain spaces
+2. Is not blank and cannot contain leading or trailing whitespace
 3. Cannot contain forward slash ("/")
 4. Can contain a maximum of 100 characters
 
