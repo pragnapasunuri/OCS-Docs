@@ -4,8 +4,13 @@ uid: sdsStreamViews
 
 # Stream Views
 
-An SdsStreamView provides a way to map Stream data requests from one data type to another. You can apply 
-a Stream View to any read or GET operation. SdsStreamView is used to specify the mapping between source and target types.
+Stream Views provide flexibility in the use of types. While you cannot actually change the properties of types themselves, the stream views feature enables you to create a view of a selected stream that appears as if you had changed the type on which it is based. Types themselves cannot actually be changed; the “changing” of a type is described in a stream view. You create a stream view by choosing a source and target type as well as a set of mappings between properties of those two types. Using a stream view to leverage existing type properties is preferable to creating an actual new custom type, because the affected stream continues with its previously archived stream data intact.
+
+You can either view the impact of the stream view on a stream in an ad hoc manner, using a GET call, or you can assign the stream view to a stream in a PUT call.
+
+To view the impact of the stream view on a stream, you can apply a stream view to any read or GET operation. See [API Calls for Reading Data](xref:sdsReadingDataApi) for examples. SdsStreamView is used to specify the mapping between source and target types.
+
+To assign the stream view to a stream, execute an [Update Stream Type](xref:sdsStreams#update-stream-type) call.  By specifying the stream view id in the call, you can effectively assign the target type of the stream view to a specified stream. 
 
 SDS attempts to determine how to map Properties from the source to the destination. When the mapping 
 is straightforward, such as when the properties are in the same position and of the same data type, 
@@ -17,8 +22,9 @@ a target property that it cannot map to, the property is added and configured wi
 To map a property that is beyond the ability of SDS to map on its own, you should define an SdsStreamViewProperty 
 and add it to the SdsStreamView’s Properties collection.
 
-The following table shows the required and optional SdsStreamView fields. Fields that are not included are reserved for internal SDS use. See the [Searching](xref:sdsSearching) topic regarding limitations on search.
+The following table shows the required and optional SdsStreamView fields. Fields that are not included are reserved for internal SDS use. See the [Search in SDS](xref:sdsSearching) topic regarding limitations on search.
 
+<a name="streamviewpropertiestable"></a>
 | Property     | Type                   | Optionality | Searchable | Details |
 |--------------|------------------------|-------------|------------|---------|
 | Id           | String                 | Required    | Yes		   |Identifier for referencing the stream view |
@@ -26,8 +32,8 @@ The following table shows the required and optional SdsStreamView fields. Fields
 | Description  | String                 | Optional    | Yes		   |Description text |
 | SourceTypeId | String                 | Required    | Yes		   |Identifier of the SdsType of the SdsStream |
 | TargetTypeId | String                 | Required    | Yes		   |Identifier of the SdsType to convert events to |
-| Properties   | IList\<SdsStreamViewProperty\> | Optional    | Yes, with limitations	  |Property level mapping |
-
+| Properties   | IList\<SdsStreamViewProperty\> | Optional    | Yes, with limitations*	  |Property level mapping |
+**\*Notes on Properties field**: SdsStreamViewProperty objects are not searchable. Only the SdsStreamViewProperty's SdsStreamView is searchable by its Id, SourceTypeId, and TargetTypeId, which are used to return the top level SdsStreamView object when searching. This includes nested SdsStreamViewProperties. For more information, see [search for stream views](xref:sdsSearching#search-for-stream-views).
 
 **Rules for the Stream View Identifier (SdsStreamView.Id)**
 
