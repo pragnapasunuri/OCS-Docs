@@ -57,7 +57,7 @@ The following table shows the required and optional SdsType fields. Fields that 
 **Rules for the Type Identifier (SdsType.Id)**
 
 1. Is not case sensitive
-2. Can contain spaces
+2. Is not blank or contain leading or trailing whitespace
 3. Cannot contain forward slash ("/")
 4. Can contain a maximum of 100 characters  
 
