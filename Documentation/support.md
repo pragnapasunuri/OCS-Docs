@@ -4,7 +4,7 @@ uid: support
 
 # Getting support
 
-We will provide you with our standard support for this offering at no additional charge. 
+We will provide you with our standard support at no additional charge. 
 End users can access contact information for OSIsoft Technical Support via the Portal. You 
 will be entitled to contact the OSIsoft Technical Support twenty-four (24) hours a day, 
 seven (7) days a week to ask questions or seek advice regarding the use of OCS. OSIsoft 
