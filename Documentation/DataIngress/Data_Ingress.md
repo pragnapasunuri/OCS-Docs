@@ -12,3 +12,4 @@ in this and subsequent sections:
 - Messages are sent to a queue called a *Topic*. 
 - A *Subscription* receives messages from a Topic and writes them to the Sequential Data Store.
 TEST
+Ji Won is adding a line
