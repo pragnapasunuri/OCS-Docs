@@ -95,7 +95,7 @@ The response includes a status code and, in most cases, a body.
 | Status code | Body Type | Description |
 |--|--|--|
 | 200 OK                    | data in the requested format  | Successfully retrieved data.  |
-| 400 Bad Request           | error | The request could not be understood by the server due to malformed syntax.
+| 400 Bad Request           | error | The data view or the query parameters are not valid. See the response body for details. |
 | 403 Forbidden             | error | User is not authorized to create a data view.
 | 500 Internal Server Error | error | An error occurred while processing the request. See the response body for details |
 
